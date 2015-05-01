@@ -1,0 +1,14 @@
+logging:
+  level:
+    com.mangofactory: WARN
+    com.netflix: WARN
+    io.undertow: WARN
+    org.springframework: WARN
+    org.xnio: WARN
+
+server:
+  port: 8081
+
+spring:
+  main:
+    show_banner: false
