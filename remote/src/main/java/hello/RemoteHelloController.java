@@ -19,7 +19,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController
 public class RemoteHelloController {
-    private static Function<In, Greeting> greet = in -> Greeting.builder().
+    private static final Function<In, Greeting> greet = in -> Greeting.
+            builder().
             message(format("Hats off to you, %s!", in.getName())).
             build();
 
