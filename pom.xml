@@ -7,7 +7,7 @@
 
     <groupId>hm.binkley.labs</groupId>
     <artifactId>simple-boot</artifactId>
-    <version>0</version>
+    <version>1</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -111,6 +111,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${jsonpath.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

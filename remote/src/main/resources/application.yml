@@ -6,6 +6,10 @@ logging:
     org.springframework: WARN
     org.xnio: WARN
 
+security:
+  user:
+    password: secret
+
 server:
   port: 8081
 
