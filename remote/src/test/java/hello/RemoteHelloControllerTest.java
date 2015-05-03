@@ -1,11 +1,5 @@
 package hello;
 
-/**
- * {@code RemoteHelloControllerTest} tests {@link RemoteHelloController}.
- *
- * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
- */
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+/**
+ * {@code RemoteHelloControllerTest} tests {@link RemoteHelloController}.
+ *
+ * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = RemoteHelloMain.class)
 @WebAppConfiguration
@@ -36,7 +35,7 @@ public class RemoteHelloControllerTest {
     }
 
     @Test
-    public void getHello()
+    public void shouldGreetWarmly()
             throws Exception {
         mvc.perform(post("/greet").
                 contentType(APPLICATION_JSON).
