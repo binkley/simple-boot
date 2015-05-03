@@ -7,6 +7,8 @@ logging:
     org.xnio: WARN
 
 security:
+  # TODO: Can path match be inverted, i.e. all BUT /manage?
+  ignored: /hello
   user:
     password: secret
 
