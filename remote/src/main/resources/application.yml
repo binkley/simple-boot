@@ -6,7 +6,12 @@ logging:
     org.springframework: WARN
     org.xnio: WARN
 
+management:
+  context-path: /manage
+
 security:
+  # TODO: Can path match be inverted, i.e. all BUT /manage?
+  ignored: /greet
   user:
     password: secret
 
