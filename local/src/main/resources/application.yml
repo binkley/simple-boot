@@ -8,9 +8,13 @@ logging:
 
 security:
   # TODO: Can path match be inverted, i.e. all BUT /manage?
-  ignored: /hello
+  ignored: /hello/*
   user:
     password: secret
+
+remote-hello:
+  ribbon:
+    listOfServers: http://localhost:8081
 
 server:
   port: 8080

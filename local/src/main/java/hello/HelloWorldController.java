@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -33,9 +34,10 @@ public class HelloWorldController {
         return remote.greet(In.builder().name(name).build());
     }
 
-    @FeignClient("http://localhost:8081")
+    @FeignClient("remote-hello")
     public interface RemoteHello {
-        @RequestMapping(value = "/greet", method = POST)
+        @RequestMapping(value = "/greet", method = POST,
+                consumes = APPLICATION_JSON_VALUE)
         Greeting greet(@RequestBody final In in);
     }
 
