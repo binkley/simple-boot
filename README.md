@@ -33,6 +33,11 @@ Spring actuator endpoints under `/manage`.
 
 Simply configured Spring security on management endpoints.
 
+### Swagger
+
+Root service path shows Swagger UI.  Requires Tomcat.  See [Swagger SpringMVC
+issue #15](https://github.com/adrianbk/swagger-springmvc-demo/issues/15).
+
 ### Testing
 
 Unit and integration tests.
