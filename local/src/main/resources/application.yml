@@ -8,7 +8,7 @@ logging:
 
 security:
   # TODO: Can path match be inverted, i.e. all BUT /manage?
-  ignored: /hello/*
+  ignored: /hello/*, /heartbeat
   user:
     password: secret
 

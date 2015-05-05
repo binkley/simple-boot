@@ -11,7 +11,7 @@ management:
 
 security:
   # TODO: Can path match be inverted, i.e. all BUT /manage?
-  ignored: /greet
+  ignored: /greet, /heartbeat
   user:
     password: secret
 
