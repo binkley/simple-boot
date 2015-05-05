@@ -33,7 +33,7 @@
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <metrics.version>3.1.0</metrics.version>
         <spring-cloud.version>1.0.1.RELEASE</spring-cloud.version>
-        <swagger-springmvc.version>1.0.1</swagger-springmvc.version>
+        <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
         <swagger-spring-mvc-ui.version>0.4</swagger-spring-mvc-ui.version>
     </properties>
 
@@ -80,16 +80,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -114,6 +104,12 @@
             <groupId>org.ajar</groupId>
             <artifactId>swagger-spring-mvc-ui</artifactId>
             <version>${swagger-spring-mvc-ui.version}</version>
+        </dependency>
+        <!-- Swagger work around - Tomcat only -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -163,6 +159,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <requiresUnpack>
+                        <dependency>
+                            <groupId>com.mangofactory</groupId>
+                            <artifactId>swagger-springmvc</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.ajar</groupId>
+                            <artifactId>swagger-spring-mvc-ui</artifactId>
+                        </dependency>
+                    </requiresUnpack>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
