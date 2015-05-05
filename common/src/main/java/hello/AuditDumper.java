@@ -20,6 +20,9 @@ public class AuditDumper
 
     @Override
     public void onApplicationEvent(final AuditApplicationEvent event) {
-        logger.error("*** Example AUDITING: {}", event);
+        switch(event.getAuditEvent().getType()) {
+        case "AUTHENTICATION_SUCCESS": break;
+        default: logger.error("*** BAD LOGIN: {}", event.getAuditEvent());
+        }
     }
 }
