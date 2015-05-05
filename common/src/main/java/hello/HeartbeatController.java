@@ -1,9 +1,11 @@
 package hello;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
 import java.net.UnknownHostException;
 
 import static java.lang.management.ManagementFactory.getRuntimeMXBean;
@@ -22,10 +24,21 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  */
 @RestController
 public class HeartbeatController {
+    private final String service;
+    private final int port;
+
+    @Inject
+    public HeartbeatController(
+            @Value("${spring.application.name}") final String service,
+            @Value("${server.port}") final int port) {
+        this.service = service;
+        this.port = port;
+    }
+
     @RequestMapping(value = "/heartbeat", method = GET)
     public Heartbeat beat()
             throws UnknownHostException {
-        return new Heartbeat();
+        return new Heartbeat(service, port);
     }
 
     @Data
@@ -36,8 +49,13 @@ public class HeartbeatController {
                 ofEpochMilli(getRuntimeMXBean().getStartTime()),
                 systemDefault()).toString();
 
-        public Heartbeat()
+        private final String service;
+        private final int port;
+
+        public Heartbeat(final String service, final int port)
                 throws UnknownHostException {
+            this.service = service;
+            this.port = port;
             hostname = getLocalHost().getHostName();
         }
     }
