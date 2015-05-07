@@ -1,8 +1,6 @@
 package hello;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,22 +34,8 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/hello/{name}", method = GET)
     public Greeting hello(@PathVariable final String name,
-            @SuppressWarnings("UnusedParameters")
             final HttpServletResponse response) {
         return remote.greet(In.builder().name(name).build(), response);
-    }
-
-    @Data
-    @Builder
-    public static class In {
-        private String name;
-
-        public In() {
-        }
-
-        public In(final String name) {
-            this.name = name;
-        }
     }
 
     @FeignClient("remote-hello")

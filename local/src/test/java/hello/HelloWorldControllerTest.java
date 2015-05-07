@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.inject.Inject;
 
-import static hello.HelloWorldController.In;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
