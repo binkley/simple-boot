@@ -10,8 +10,8 @@ management:
   context-path: /manage
 
 security:
-  # TODO: Can path match be inverted, i.e. all BUT /manage?
-  ignored: /greet, /heartbeat
+  basic:
+    enabled: false
   user:
     password: secret
 

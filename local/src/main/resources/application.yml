@@ -7,14 +7,14 @@ logging:
     org.xnio: WARN
 
 security:
-  # TODO: Can path match be inverted, i.e. all BUT /manage?
-  ignored: /hello/*, /heartbeat
+  basic:
+    enabled: false
   user:
     password: secret
 
 remote-hello:
   ribbon:
-    listOfServers: http://localhost:8081
+    listOfServers: localhost:8081
 
 server:
   port: 8080
