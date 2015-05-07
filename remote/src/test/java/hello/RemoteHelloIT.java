@@ -48,7 +48,7 @@ public class RemoteHelloIT {
     }
 
     @Test
-    public void shouldGreet()
+    public void shouldGreetBob()
             throws Exception {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(APPLICATION_JSON);

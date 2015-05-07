@@ -1,6 +1,5 @@
 package hello;
 
-import feign.Response;
 import hello.HelloWorldController.FeignRemoteHello;
 import hello.HelloWorldController.HystrixRemoteHello;
 import hello.HelloWorldControllerTest.Mocks;
@@ -18,17 +17,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.inject.Inject;
 
-import static feign.FeignException.errorStatus;
 import static hello.HelloWorldController.In;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyMap;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.I_AM_A_TEAPOT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -72,7 +68,7 @@ public class HelloWorldControllerTest {
     }
 
     @Test
-    public void shouldSayHello()
+    public void shouldSayHelloToBob()
             throws Exception {
         final ArgumentCaptor<In> in = ArgumentCaptor.forClass(In.class);
         when(feign.greet(in.capture())).
@@ -81,6 +77,7 @@ public class HelloWorldControllerTest {
         mvc.perform(get("/hello/Bob").
                 accept(APPLICATION_JSON)).
                 andExpect(status().isOk()).
+                andExpect(header().doesNotExist("Warning")).
                 andExpect(content().
                         contentTypeCompatibleWith(APPLICATION_JSON)).
                 andExpect(jsonPath("$.message", is(equalTo("Hello, Bob!"))));
@@ -91,12 +88,8 @@ public class HelloWorldControllerTest {
     @Test
     public void shouldDieGracefully()
             throws Exception {
-        final ArgumentCaptor<In> in = ArgumentCaptor.forClass(In.class);
-        when(feign.greet(in.capture())).
-                thenThrow(errorStatus("greet",
-                        Response.create(I_AM_A_TEAPOT.value(),
-                                "Coffee is American", emptyMap(),
-                                "Frodo lives!", UTF_8)));
+        when(feign.greet(any())).
+                thenThrow(new RuntimeException("Things are broken."));
 
         mvc.perform(get("/hello/Bob").
                 accept(APPLICATION_JSON)).
