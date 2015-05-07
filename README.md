@@ -25,6 +25,10 @@ Configure logging in `application.yml` and `bootstrap.yml`.
 
 GET on local calls to POST on remote via a Feign client.
 
+### Netflix Hystrix
+
+Local calls remote with hystrix and fallback.
+
 ### Spring Actuator
 
 Spring actuator endpoints under `/manage`.
