@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import static java.lang.String.format;
-import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
+import static javax.servlet.http.HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -61,9 +61,10 @@ public class HelloWorldController {
             return remote.greet(in);
         }
 
+        @SuppressWarnings("unused")
         private Greeting die(final In in,
                 final HttpServletResponse response) {
-            response.setStatus(SERVICE_UNAVAILABLE.value());
+            response.setStatus(SC_NON_AUTHORITATIVE_INFORMATION);
             response.addHeader("Warning", "remote-hello unavailable");
             return Greeting.builder().
                     message(format("No dice, %s.", in.getName())).

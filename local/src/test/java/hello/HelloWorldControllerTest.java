@@ -76,7 +76,7 @@ public class HelloWorldControllerTest {
 
         mvc.perform(get("/hello/Bob").
                 accept(APPLICATION_JSON)).
-                andExpect(status().isServiceUnavailable()).
+                andExpect(status().isNonAuthoritativeInformation()).
                 andExpect(header().
                         string("Warning", "remote-hello unavailable")).
                 andExpect(content().
