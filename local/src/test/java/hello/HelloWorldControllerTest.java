@@ -2,7 +2,6 @@ package hello;
 
 import hello.HelloWorldController.FeignRemoteHello;
 import hello.HelloWorldController.HystrixRemoteHello;
-import hello.HelloWorldControllerTest.Mocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +37,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {HelloWorldMain.class, Mocks.class})
+@SpringApplicationConfiguration(classes = HelloWorldMain.class)
 @WebAppConfiguration
 public class HelloWorldControllerTest {
     private MockMvc mvc;
@@ -49,13 +48,11 @@ public class HelloWorldControllerTest {
     public HystrixRemoteHello hystrix;
 
     @Configuration
-    public static class Mocks {
-        private final FeignRemoteHello feign = mock(FeignRemoteHello.class);
-
+    public static class RemoteMocks {
         @Bean
         @Primary
         public FeignRemoteHello feignRemoteHello() {
-            return feign;
+            return mock(FeignRemoteHello.class);
         }
     }
 
