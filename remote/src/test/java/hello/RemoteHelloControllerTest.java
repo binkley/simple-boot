@@ -35,7 +35,7 @@ public class RemoteHelloControllerTest {
     }
 
     @Test
-    public void shouldGreetWarmly()
+    public void shouldGreetBob()
             throws Exception {
         mvc.perform(post("/greet").
                 contentType(APPLICATION_JSON).

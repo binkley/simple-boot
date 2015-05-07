@@ -7,7 +7,6 @@ package hello;
  * @todo Needs documentation
  */
 
-import hello.RemoteHelloController.In;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +47,7 @@ public class RemoteHelloIT {
     }
 
     @Test
-    public void shouldGreet()
+    public void shouldGreetBob()
             throws Exception {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(APPLICATION_JSON);
