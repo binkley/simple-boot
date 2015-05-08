@@ -13,6 +13,10 @@
 
 Example auditing, prints to log.
 
+### Health
+
+Simple health indicator for a remote service.
+
 ### Heartbeat
 
 A simple timestamp endpoint on `/heartbeat`.

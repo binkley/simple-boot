@@ -1,7 +1,5 @@
 package hello;
 
-import hello.HelloWorldController.FeignRemoteHello;
-import hello.HelloWorldController.HystrixRemoteHello;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

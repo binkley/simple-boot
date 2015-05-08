@@ -7,7 +7,6 @@ package hello;
  * @todo Needs documentation
  */
 
-import hello.HelloWorldController.FeignRemoteHello;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
