@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>remote</artifactId>
-    <name>RemoteHello</name>
+    <name>Remote Hello</name>
     <description>Greetings, Earth!</description>
 
     <dependencies>
