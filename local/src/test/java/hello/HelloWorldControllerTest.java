@@ -76,7 +76,8 @@ public class HelloWorldControllerTest {
                 accept(APPLICATION_JSON)).
                 andExpect(status().isNonAuthoritativeInformation()).
                 andExpect(header().
-                        string("Warning", "remote-hello unavailable")).
+                        string("Warning",
+                                "199 remote-hello \"Service unavailable\"")).
                 andExpect(content().
                         contentTypeCompatibleWith(APPLICATION_JSON)).
                 andExpect(

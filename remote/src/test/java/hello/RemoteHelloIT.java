@@ -24,9 +24,13 @@ import java.net.URI;
 
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -38,26 +42,43 @@ public class RemoteHelloIT {
     @Value("${local.server.port}")
     private int port;
 
-    private TestRestTemplate template;
+    private TestRestTemplate rest;
 
     @Before
     public void setUp()
             throws Exception {
-        template = new TestRestTemplate("user", "secret");
+        rest = new TestRestTemplate("user", "secret");
+    }
+
+    @Test
+    public void shouldRequireXCorrelationIDHeader() {
+        final ResponseEntity<String> response = rest.exchange(
+                new RequestEntity<In>(GET, URI.create(
+                        format("http://localhost:%d/hello/Bob", port))),
+                String.class);
+
+        assertThat(response.getStatusCode(), is(BAD_REQUEST));
+        assertThat(response.getHeaders().get("Warning"), is(singletonList(
+                "299 localhost \"Missing X-Correlation-ID header\"")));
+        assertThat(response.getHeaders().getContentType().
+                isCompatibleWith(APPLICATION_JSON), is(true));
     }
 
     @Test
     public void shouldGreetBob()
             throws Exception {
         final HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Correlation-ID", "Mary");
         headers.setContentType(APPLICATION_JSON);
         final RequestEntity<In> request = new RequestEntity<>(
                 In.builder().name("Bob").build(), headers, POST,
                 URI.create(format("http://localhost:%d/greet", port)));
-        final ResponseEntity<String> response = template.
+        final ResponseEntity<String> response = rest.
                 exchange(request, String.class);
 
         assertThat(response.getStatusCode(), is(OK));
+        assertThat(response.getHeaders().get("X-Correlation-ID"),
+                is(equalTo(singletonList("Mary"))));
         assertThat(response.getHeaders().getContentType().
                 isCompatibleWith(APPLICATION_JSON), is(true));
         with(response.getBody()).
