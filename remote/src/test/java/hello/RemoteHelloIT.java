@@ -53,15 +53,11 @@ public class RemoteHelloIT {
     @Test
     public void shouldRequireXCorrelationIDHeader() {
         final ResponseEntity<String> response = rest.exchange(
-                new RequestEntity<In>(GET, URI.create(
-                        format("http://localhost:%d/hello/Bob", port))),
+                new RequestEntity<String>(GET, URI.create(
+                        format("http://localhost:%d/greet/Bob", port))),
                 String.class);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
-        assertThat(response.getHeaders().getContentType().
-                isCompatibleWith(APPLICATION_JSON), is(true));
     }
 
     @Test

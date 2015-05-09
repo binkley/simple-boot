@@ -60,17 +60,11 @@ public class HelloWorldIT {
     }
 
     @Test
-    public void shouldRequireXCorrelationIDHeader() {
-        final ResponseEntity<String> response = rest.exchange(
-                new RequestEntity<In>(GET, URI.create(
-                        format("http://localhost:%d/hello/Bob", port))),
-                String.class);
+    public void shouldRejectMissingXCorrelationIDHeader() {
+        final HttpHeaders headers = new HttpHeaders();
+        final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
-        assertThat(response.getHeaders().getContentType().
-                isCompatibleWith(APPLICATION_JSON), is(true));
     }
 
     @Test
@@ -82,10 +76,7 @@ public class HelloWorldIT {
 
         final HttpHeaders headers = new HttpHeaders();
         headers.set("X-Correlation-ID", "Mary");
-        final ResponseEntity<String> response = rest.
-                exchange(new RequestEntity<In>(headers, GET, URI.create(
-                                format("http://localhost:%d/hello/Bob",
-                                        port))), String.class);
+        final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
@@ -106,10 +97,7 @@ public class HelloWorldIT {
 
         final HttpHeaders headers = new HttpHeaders();
         headers.set("X-Correlation-ID", "Mary");
-        final ResponseEntity<String> response = rest.
-                exchange(new RequestEntity<In>(headers, GET, URI.create(
-                                format("http://localhost:%d/hello/Bob",
-                                        port))), String.class);
+        final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(),
                 is(NON_AUTHORITATIVE_INFORMATION));
@@ -121,5 +109,11 @@ public class HelloWorldIT {
                 isCompatibleWith(APPLICATION_JSON), is(true));
         with(response.getBody()).
                 assertEquals("$.message", "No dice, Bob.");
+    }
+
+    private ResponseEntity<String> callWith(final HttpHeaders headers) {
+        return rest.exchange(new RequestEntity<In>(headers, GET, URI.create(
+                        format("http://localhost:%d/hello/Bob", port))),
+                String.class);
     }
 }
