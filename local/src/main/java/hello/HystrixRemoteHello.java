@@ -1,6 +1,7 @@
 package hello;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NON_AUTHORITATIVE_INFORM
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  * @todo Needs documentation
+ * @see HeadersFeignInterceptor Why execution.isolation.strategy?
  */
 @Component
 public class HystrixRemoteHello {
@@ -24,7 +26,10 @@ public class HystrixRemoteHello {
         this.remote = remote;
     }
 
-    @HystrixCommand(groupKey = "remote-hello", fallbackMethod = "die")
+    @HystrixCommand(groupKey = "remote-hello", fallbackMethod = "die",
+            commandProperties = @HystrixProperty(
+                    name = "execution.isolation.strategy",
+                    value = "SEMAPHORE"))
     public Greeting greet(final In in, @SuppressWarnings("UnusedParameters")
     final HttpServletResponse response) {
         return remote.greet(in);
