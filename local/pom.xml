@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>local</artifactId>
-    <name>HelloWorld</name>
+    <name>Hello World</name>
     <description>Hello, World!</description>
 
     <dependencies>

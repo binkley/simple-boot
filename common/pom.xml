@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>common</artifactId>
-    <name>DemoCommon</name>
+    <name>Rest Common</name>
     <description>Features for all services</description>
 
     <build>
