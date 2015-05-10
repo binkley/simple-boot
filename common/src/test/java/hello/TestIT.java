@@ -47,6 +47,16 @@ public class TestIT {
     }
 
     @Test
+    public void shouldXCorrelationIDHeaderRequiredOnlyIfConfigured() {
+        final ResponseEntity<String> response = rest.exchange(
+                new RequestEntity<String>(GET, URI.create(
+                        format("http://localhost:%d/heartbeat", port))),
+                String.class);
+
+        assertThat(response.getStatusCode(), is(OK));
+    }
+
+    @Test
     public void shouldRejectMissingXCorrelationIDHeader() {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseEntity<String> response = callWith(headers);
@@ -84,6 +94,13 @@ public class TestIT {
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "One");
         final ResponseEntity<String> response = callWith(headers);
+
+        assertThat(response.getStatusCode(), is(OK));
+        assertThat(response.getHeaders().containsKey("Warning"), is(false));
+    }
+
+    public void shouldIgnoreXCorrelationIDHeaderForWrongPath() {
+        final ResponseEntity<String> response = callWith(new HttpHeaders());
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));

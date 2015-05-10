@@ -1,3 +1,7 @@
+headers:
+  correlation-id:
+    paths: /test
+
 security:
   basic:
     enabled: false
