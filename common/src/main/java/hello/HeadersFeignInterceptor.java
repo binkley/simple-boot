@@ -1,7 +1,9 @@
 package hello;
 
+import feign.Feign;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -24,6 +26,7 @@ import static org.springframework.web.context.request.RequestContextHolder.curre
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  */
 @Component
+@ConditionalOnClass(Feign.class)
 public class HeadersFeignInterceptor
         implements RequestInterceptor {
     @Override
