@@ -50,7 +50,7 @@ public class XCorrelationIdFilter
                     format("299 %s \"Multiple X-Correlation-ID headers\"",
                             request.getLocalName()));
             response.sendError(SC_BAD_REQUEST,
-                    "Multiple X-Correlation-ID header");
+                    "Multiple X-Correlation-ID headers");
         }
     }
 }
