@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,6 +34,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NON_AUTHORITATIVE_INFORMATION;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -58,19 +60,28 @@ public class HelloWorldIT {
     }
 
     @Test
+    public void shouldRejectMissingXCorrelationIDHeader() {
+        final HttpHeaders headers = new HttpHeaders();
+        final ResponseEntity<String> response = callWith(headers);
+
+        assertThat(response.getStatusCode(), is(BAD_REQUEST));
+    }
+
+    @Test
     public void shouldSayHelloToBob()
             throws Exception {
         final ArgumentCaptor<In> in = ArgumentCaptor.forClass(In.class);
         when(feign.greet(in.capture())).
                 thenReturn(Greeting.builder().message("Hello, Bob!").build());
 
-        final ResponseEntity<String> response = rest.
-                exchange(new RequestEntity<In>(GET, URI.create(
-                        format("http://localhost:%d/hello/Bob", port))),
-                        String.class);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Correlation-ID", "Mary");
+        final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
+        assertThat(response.getHeaders().get("X-Correlation-ID"),
+                is(equalTo(singletonList("Mary"))));
         assertThat(response.getHeaders().getContentType().
                 isCompatibleWith(APPLICATION_JSON), is(true));
         with(response.getBody()).
@@ -84,18 +95,25 @@ public class HelloWorldIT {
         when(feign.greet(any())).
                 thenThrow(new RuntimeException("No dice, Bob."));
 
-        final ResponseEntity<String> response = rest.
-                exchange(new RequestEntity<In>(GET, URI.create(
-                        format("http://localhost:%d/hello/Bob", port))),
-                        String.class);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Correlation-ID", "Mary");
+        final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(),
                 is(NON_AUTHORITATIVE_INFORMATION));
-        assertThat(response.getHeaders().get("Warning"),
-                is(equalTo(singletonList("remote-hello unavailable"))));
+        assertThat(response.getHeaders().get("Warning"), is(equalTo(
+                singletonList("199 remote-hello \"Service unavailable\""))));
+        assertThat(response.getHeaders().get("X-Correlation-ID"),
+                is(equalTo(singletonList("Mary"))));
         assertThat(response.getHeaders().getContentType().
                 isCompatibleWith(APPLICATION_JSON), is(true));
         with(response.getBody()).
                 assertEquals("$.message", "No dice, Bob.");
+    }
+
+    private ResponseEntity<String> callWith(final HttpHeaders headers) {
+        return rest.exchange(new RequestEntity<In>(headers, GET, URI.create(
+                        format("http://localhost:%d/hello/Bob", port))),
+                String.class);
     }
 }

@@ -8,11 +8,11 @@
     <parent>
         <groupId>hm.binkley.labs</groupId>
         <artifactId>simple-boot</artifactId>
-        <version>7</version>
+        <version>8</version>
     </parent>
 
     <artifactId>remote</artifactId>
-    <name>RemoteHello</name>
+    <name>Remote Hello</name>
     <description>Greetings, Earth!</description>
 
     <dependencies>
