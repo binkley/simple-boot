@@ -24,6 +24,8 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 @Component
 public class XCorrelationIdFilter
         extends OncePerRequestFilter {
+    private static final String HEADER = "X-Correlation-ID";
+
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
@@ -31,26 +33,34 @@ public class XCorrelationIdFilter
         // Use set to ignore duplicate identical headers; use sorted set to
         // have first()
         final SortedSet<String> headers = new TreeSet<>();
-        headers.addAll(list(request.getHeaders("X-Correlation-ID")));
+        headers.addAll(list(request.getHeaders(HEADER)));
 
         switch (headers.size()) {
         case 1:
-            response.setHeader("X-Correlation-ID", headers.first());
-            filterChain.doFilter(request, response);
+            accept(request, response, filterChain, headers.first());
             return;
         case 0:
-            response.setHeader("Warning",
-                    format("299 %s \"Missing X-Correlation-ID header\"",
-                            request.getLocalName()));
-            response.sendError(SC_BAD_REQUEST,
-                    "Missing X-Correlation-ID header");
+            reject(request, response, "Missing %s header");
             return;
         default:
-            response.setHeader("Warning",
-                    format("299 %s \"Multiple X-Correlation-ID headers\"",
-                            request.getLocalName()));
-            response.sendError(SC_BAD_REQUEST,
-                    "Multiple X-Correlation-ID headers");
+            reject(request, response, "Multiple %s headers");
         }
+    }
+
+    private static void accept(final HttpServletRequest request,
+            final HttpServletResponse response, final FilterChain filterChain,
+            final String correlationID)
+            throws IOException, ServletException {
+        response.setHeader(HEADER, correlationID);
+        filterChain.doFilter(request, response);
+    }
+
+    private static void reject(final HttpServletRequest request,
+            final HttpServletResponse response, final String format)
+            throws IOException {
+        final String message = format(format, HEADER);
+        response.setHeader("Warning",
+                format("299 %s \"%s\"", request.getLocalName(), message));
+        response.sendError(SC_BAD_REQUEST, message);
     }
 }
