@@ -2,6 +2,7 @@
 
 ## Modules
 
+* [common](common/) - Code shared by other modules
 * [local](local/) - "Local" service demonstrating GET calling to POST
 * [remote](remote/) - "Remote" service demonstrating POST
 
@@ -27,7 +28,9 @@ Configure logging in `application.yml` and `bootstrap.yml`.
 
 ### Netflix Feign
 
-GET on local calls to POST on remote via a Feign client.
+GET on local calls to POST on remote via a Feign client.  Passes all HTTP
+headers from caller through to Feign target.  Example required header,
+`X-Correlation-ID`.
 
 ### Netflix Hystrix
 
