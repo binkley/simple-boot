@@ -21,15 +21,15 @@ logging:
     org.springframework: WARN
     org.xnio: WARN
 
+remote-hello:
+  ribbon:
+    listOfServers: localhost:8081
+
 security:
   basic:
     enabled: false
   user:
     password: secret
-
-remote-hello:
-  ribbon:
-    listOfServers: localhost:8081
 
 server:
   port: 8080
@@ -37,3 +37,14 @@ server:
 spring:
   main:
     show_banner: false
+
+# TODO: Address Spring filtering
+swagger:
+  api:
+    title: Simple Boot
+    description: Simple examples for Spring Boot
+    contact:
+      email-address: me@there.xxx
+    license:
+      name: Public Domain # @project.licenses[0].name@
+      url: http://unlicense.org/UNLICENSE # @project.licenses[0].url@
