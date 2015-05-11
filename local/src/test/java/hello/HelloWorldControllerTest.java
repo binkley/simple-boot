@@ -56,6 +56,7 @@ public class HelloWorldControllerTest {
                 thenReturn(Greeting.builder().message("Hello, Bob!").build());
 
         mvc.perform(get("/hello/Bob").
+                header("X-Correlation-ID", "Fred").
                 accept(APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andExpect(header().doesNotExist("Warning")).
@@ -73,6 +74,7 @@ public class HelloWorldControllerTest {
                 thenThrow(new RuntimeException("Things are broken."));
 
         mvc.perform(get("/hello/Bob").
+                header("X-Correlation-ID", "Fred").
                 accept(APPLICATION_JSON)).
                 andExpect(status().isNonAuthoritativeInformation()).
                 andExpect(header().
