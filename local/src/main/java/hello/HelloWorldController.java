@@ -35,7 +35,7 @@ public class HelloWorldController {
     @ApiResponses({@ApiResponse(code = 203,
             message = "Remote services are unavailable"),
             @ApiResponse(code = 400,
-                    message = "Recheck your X-Correlation-ID")})
+                    message = "Missing or multiple X-Correlation-ID headers")})
     @RequestMapping(value = "/hello/{name}", method = GET)
     public Greeting hello(
             @ApiParam("What is your name?") @PathVariable final String name,
