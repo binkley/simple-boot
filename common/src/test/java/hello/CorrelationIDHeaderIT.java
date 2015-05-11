@@ -1,12 +1,5 @@
 package hello;
 
-/**
- * {@code RemoteHelloIT} <strong>needs documentation</strong>.
- *
- * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
- * @todo Needs documentation
- */
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,11 +23,17 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * {@code CorrelationIDHeaderIT} provides integration testing for the {@code
+ * X-Correlation-ID} header.
+ *
+ * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestMain.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=0")
-public class TestIT {
+public class CorrelationIDHeaderIT {
     @Value("${local.server.port}")
     private int port;
 
