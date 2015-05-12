@@ -30,7 +30,7 @@ Configure logging in `application.yml` and `bootstrap.yml`.
 
 GET on local calls to POST on remote via a Feign client.  Passes all HTTP
 headers from caller through to Feign target.  Example required header,
-`X-Correlation-ID`.
+`X-Correlation-ID` on non-management endpoints.
 
 ### Netflix Hystrix
 
@@ -38,7 +38,7 @@ Local calls remote with hystrix and fallback.
 
 ### Spring Actuator
 
-Spring actuator endpoints under `/manage`.
+Example health indicator with `hello.health.RemoteHello`.
 
 ### Spring Security
 
