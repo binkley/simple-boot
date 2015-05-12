@@ -28,7 +28,6 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
@@ -53,8 +52,8 @@ public class RemoteHelloIT {
     @Test
     public void shouldRequireXCorrelationIDHeader() {
         final ResponseEntity<String> response = rest.exchange(
-                new RequestEntity<String>(GET, URI.create(
-                        format("http://localhost:%d/greet/Bob", port))),
+                new RequestEntity<String>(POST, URI.create(
+                        format("http://localhost:%d/greet", port))),
                 String.class);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));

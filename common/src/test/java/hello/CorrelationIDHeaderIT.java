@@ -1,12 +1,5 @@
 package hello;
 
-/**
- * {@code RemoteHelloIT} <strong>needs documentation</strong>.
- *
- * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
- * @todo Needs documentation
- */
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,11 +23,17 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * {@code CorrelationIDHeaderIT} provides integration testing for the {@code
+ * X-Correlation-ID} header.
+ *
+ * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestMain.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=0")
-public class TestIT {
+public class CorrelationIDHeaderIT {
     @Value("${local.server.port}")
     private int port;
 
@@ -44,6 +43,16 @@ public class TestIT {
     public void setUp()
             throws Exception {
         rest = new TestRestTemplate();
+    }
+
+    @Test
+    public void shouldXCorrelationIDHeaderRequiredOnlyIfConfigured() {
+        final ResponseEntity<String> response = rest.exchange(
+                new RequestEntity<String>(GET, URI.create(
+                        format("http://localhost:%d/heartbeat", port))),
+                String.class);
+
+        assertThat(response.getStatusCode(), is(OK));
     }
 
     @Test
@@ -84,6 +93,13 @@ public class TestIT {
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "One");
         final ResponseEntity<String> response = callWith(headers);
+
+        assertThat(response.getStatusCode(), is(OK));
+        assertThat(response.getHeaders().containsKey("Warning"), is(false));
+    }
+
+    public void shouldIgnoreXCorrelationIDHeaderForWrongPath() {
+        final ResponseEntity<String> response = callWith(new HttpHeaders());
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));

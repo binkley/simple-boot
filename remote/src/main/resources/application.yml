@@ -2,6 +2,10 @@ endpoints:
   health:
     sensitive: false
 
+headers:
+  correlation-id:
+    paths: /greet
+
 info:
   build:
     artifact: @project.artifactId@

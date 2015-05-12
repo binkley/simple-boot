@@ -22,8 +22,14 @@ import static org.springframework.web.context.request.RequestContextHolder.curre
  * Command</cite></a></li> <li><a href="https://github.com/Netflix/feign/issues/214"><cite>Better
  * support for request-specific headers #214</cite></a> (Solution in
  * progress)</li></ul>
+ * <p>
+ * <strong>NB</strong> &mdash; For this workaround to work, methods annotated
+ * {@code &#64;HystrixCommand} must include the annotation parameter, {@code
+ * commandProperties = &#64;HystrixProperty(name = "execution.isolation.strategy",
+ * value = "SEMAPHORE")}.
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
+ * @todo Remote when underlying Feign issue is resolved
  */
 @Component
 @ConditionalOnClass(Feign.class)

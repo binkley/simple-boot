@@ -2,6 +2,7 @@ package hello;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  * @todo Needs documentation
  */
+@ConditionalOnProperty(value = "endpoints.heartbeat.enabled",
+        matchIfMissing = true)
 @RestController
 public class HeartbeatController {
     private final String service;
