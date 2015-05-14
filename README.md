@@ -10,9 +10,10 @@
 
 ### Spring Boot
 
-### Audit Service
+### Audit trail
 
-Example auditing, prints to log.
+- Example auditing, prints to log.
+- Audit controller for querying.
 
 ### Health
 

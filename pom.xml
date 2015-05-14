@@ -7,7 +7,7 @@
 
     <groupId>hm.binkley.labs</groupId>
     <artifactId>simple-boot</artifactId>
-    <version>9</version>
+    <version>10</version>
     <packaging>pom</packaging>
 
     <name>Parent</name>
