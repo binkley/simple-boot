@@ -57,6 +57,8 @@ public class RemoteHelloIT {
                 String.class);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
+        assertThat(response.getHeaders().get("Warning"), is(singletonList(
+                "299 localhost \"Missing X-Correlation-ID header\"")));
     }
 
     @Test
