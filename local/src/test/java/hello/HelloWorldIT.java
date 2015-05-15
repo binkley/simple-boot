@@ -65,6 +65,8 @@ public class HelloWorldIT {
         final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
+        assertThat(response.getHeaders().get("Warning"), is(singletonList(
+                "299 localhost \"Missing X-Correlation-ID header\"")));
     }
 
     @Test
