@@ -1,0 +1,38 @@
+endpoints:
+  health:
+    sensitive: false
+
+headers:
+  correlation-id:
+    paths: /config/**
+
+info:
+  build:
+    artifact: @project.artifactId@
+    name: @project.name@
+    description: @project.description@
+    version: @project.version@
+
+logging:
+  level:
+    com.mangofactory: WARN
+    com.netflix: WARN
+    io.undertow: WARN
+    org.springframework: WARN
+    org.xnio: WARN
+
+management:
+  context-path: /manage
+
+security:
+  basic:
+    enabled: false
+  user:
+    password: secret
+
+server:
+  port: 8082
+
+spring:
+  main:
+    show_banner: false
