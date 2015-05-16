@@ -3,6 +3,7 @@
 ## Modules
 
 * [common](common/) - Code shared by other modules
+* [configish](configish) - Example config service
 * [local](local/) - "Local" service demonstrating GET calling to POST
 * [remote](remote/) - "Remote" service demonstrating POST
 
