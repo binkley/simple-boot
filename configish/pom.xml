@@ -8,7 +8,7 @@
     <parent>
         <groupId>hm.binkley.labs</groupId>
         <artifactId>simple-boot</artifactId>
-        <version>11-SNAPSHOT</version>
+        <version>11</version>
     </parent>
 
     <artifactId>configish</artifactId>
