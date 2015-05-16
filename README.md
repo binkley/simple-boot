@@ -16,6 +16,11 @@
 - Example auditing, prints to log.
 - Audit controller for querying.
 
+### Mock configuration service
+
+Configish is for a feign client to a foreign configuration service from Spring
+cloud config server.
+
 ### Health
 
 Simple health indicator for a remote service.
