@@ -5,3 +5,7 @@ logging:
 spring:
   application:
     name: hello-world
+  cloud:
+    config:
+      username: user
+      password: secret
