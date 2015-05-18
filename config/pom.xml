@@ -11,8 +11,8 @@
         <version>12-SNAPSHOT</version>
     </parent>
 
-    <artifactId>configish</artifactId>
-    <name>Stub Config Service</name>
+    <artifactId>config</artifactId>
+    <name>Spring Cloud Config Service</name>
     <description>Wax on, wane off</description>
 
     <dependencies>
