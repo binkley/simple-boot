@@ -47,7 +47,7 @@ swagger:
     title: Simple Boot
     description: Simple examples for Spring Boot
     contact:
-      email-address: me@there.xxx
+      email-address: binkley@alumni.rice.edu
     license:
       name: Public Domain # @project.licenses[0].name@
       url: http://unlicense.org/UNLICENSE # @project.licenses[0].url@
