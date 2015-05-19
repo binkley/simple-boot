@@ -21,6 +21,9 @@ logging:
     org.springframework: WARN
     org.xnio: WARN
 
+management:
+  context-path: /admin
+
 remote-hello:
   ribbon:
     listOfServers: localhost:8081

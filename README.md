@@ -21,6 +21,10 @@
 Configish is for a feign client to a foreign configuration service from Spring
 cloud config server.
 
+### Management
+
+All management endpoints moved to `/admin`.
+
 ### Health
 
 Simple health indicator for a remote service.

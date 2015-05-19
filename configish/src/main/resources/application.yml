@@ -22,7 +22,7 @@ logging:
     org.xnio: WARN
 
 management:
-  context-path: /manage
+  context-path: /admin
 
 security:
   basic:
