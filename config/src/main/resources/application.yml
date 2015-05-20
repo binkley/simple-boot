@@ -22,7 +22,7 @@ logging:
     org.xnio: WARN
 
 management:
-  context-path: /manage
+  context-path: /admin
 
 security:
   basic:
@@ -31,8 +31,14 @@ security:
     password: secret
 
 server:
-  port: 8082
+  port: 8888
 
 spring:
+  cloud:
+    config:
+      server:
+        git:
+          basedir: target/config
+          uri: file:///Users/boxley/src/java//simple-boot-config
   main:
     show_banner: false

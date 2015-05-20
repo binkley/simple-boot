@@ -4,4 +4,4 @@ logging:
 
 spring:
   application:
-    name: configish
+    name: config-service
