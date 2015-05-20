@@ -31,9 +31,11 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
  * @todo Needs documentation
  */
 @Component
-@ConditionalOnProperty("headers.correlation-id.paths")
-public class XCorrelationIdFilter
+@ConditionalOnProperty("headers.correlation-id.server.paths")
+public class CorrelationIdFilter
         extends OncePerRequestFilter {
+    public static final int WC_CORRELATION_ID = 250;
+
     private static final String header = "X-Correlation-ID";
     private static final Pattern comma = compile("\\s*,\\s+");
     private static final PathMatcher matcher = new AntPathMatcher();
@@ -41,8 +43,9 @@ public class XCorrelationIdFilter
     private final List<String> paths;
 
     @Inject
-    public XCorrelationIdFilter(
-            @Value("${headers.correlation-id.paths}") final String paths) {
+    public CorrelationIdFilter(
+            @Value("${headers.correlation-id.server.paths}")
+            final String paths) {
         this.paths = asList(comma.split(paths));
     }
 
@@ -52,16 +55,14 @@ public class XCorrelationIdFilter
             throws ServletException, IOException {
         final String uri = request.getRequestURI();
         if (!paths.stream().
-                anyMatch(p -> matcher.match(p, uri))) {
+                anyMatch(path -> matcher.match(path, uri))) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Use set to ignore duplicate identical headers; use sorted set to
-        // have first()
-        final SortedSet<String> headers = new TreeSet<>();
-        headers.addAll(list(request.getHeaders(header)));
-
+        // Use set to ignore duplicate identical headers
+        final SortedSet<String> headers = new TreeSet<>(
+                list(request.getHeaders(header)));
         switch (headers.size()) {
         case 1:
             accept(request, response, filterChain, headers.first());
@@ -76,9 +77,9 @@ public class XCorrelationIdFilter
 
     private static void accept(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain,
-            final String correlationID)
+            final String correlationId)
             throws IOException, ServletException {
-        response.setHeader(header, correlationID);
+        response.setHeader(header, correlationId);
         filterChain.doFilter(request, response);
     }
 
@@ -87,7 +88,9 @@ public class XCorrelationIdFilter
             throws IOException {
         final String message = format(format, header);
         response.setHeader("Warning",
-                format("299 %s \"%s\"", request.getLocalName(), message));
+                format("%d %s:%d \"%s\"", WC_CORRELATION_ID,
+                        request.getLocalName(), request.getLocalPort(),
+                        message));
         response.sendError(SC_BAD_REQUEST, message);
     }
 }
