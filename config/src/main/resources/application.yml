@@ -39,6 +39,6 @@ spring:
       server:
         git:
           basedir: target/config
-          uri: https://github.com/spring-cloud-samples/config-repo
+          uri: file:///Users/boxley/src/java//simple-boot-config
   main:
     show_banner: false
