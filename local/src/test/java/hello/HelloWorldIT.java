@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import java.net.URI;
 
 import static com.jayway.jsonassert.JsonAssert.with;
+import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
@@ -49,6 +50,10 @@ public class HelloWorldIT {
 
     @Inject
     private FeignRemoteHello feign;
+    @Value("${security.user.name:user}")
+    private String user;
+    @Value("${security.user.password}")
+    private String password;
 
     private TestRestTemplate rest;
 
@@ -56,17 +61,18 @@ public class HelloWorldIT {
     public void setUp()
             throws Exception {
         reset(feign);
-        rest = new TestRestTemplate("user", "secret");
+        rest = new TestRestTemplate(user, password);
     }
 
     @Test
-    public void shouldRejectMissingXCorrelationIDHeader() {
+    public void shouldRejectMissingCorrelationIDHeader() {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
         assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
+                format("%d localhost:%d \"Missing X-Correlation-ID header\"",
+                        WC_CORRELATION_ID, port))));
     }
 
     @Test

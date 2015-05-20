@@ -23,6 +23,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.net.URI;
 
 import static com.jayway.jsonassert.JsonAssert.with;
+import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
@@ -50,7 +51,7 @@ public class RemoteHelloIT {
     }
 
     @Test
-    public void shouldRequireXCorrelationIDHeader() {
+    public void shouldRequireCorrelationIDHeader() {
         final ResponseEntity<String> response = rest.exchange(
                 new RequestEntity<String>(POST, URI.create(
                         format("http://localhost:%d/greet", port))),
@@ -58,7 +59,8 @@ public class RemoteHelloIT {
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
         assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
+                format("%d localhost:%d \"Missing X-Correlation-ID header\"",
+                        WC_CORRELATION_ID, port))));
     }
 
     @Test
