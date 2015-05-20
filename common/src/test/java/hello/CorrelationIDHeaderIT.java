@@ -47,7 +47,7 @@ public class CorrelationIDHeaderIT {
     }
 
     @Test
-    public void shouldXCorrelationIDHeaderRequiredOnlyIfConfigured() {
+    public void shouldCorrelationIdHeaderRequiredOnlyIfConfigured() {
         final ResponseEntity<String> response = rest.exchange(
                 new RequestEntity<String>(GET, URI.create(
                         format("http://localhost:%d/heartbeat", port))),
@@ -57,9 +57,9 @@ public class CorrelationIDHeaderIT {
     }
 
     @Test
-    public void shouldRejectMissingXCorrelationIDHeader() {
+    public void shouldRejectMissingCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
         assertThat(response.getHeaders().get("Warning"), is(singletonList(
@@ -68,11 +68,11 @@ public class CorrelationIDHeaderIT {
     }
 
     @Test
-    public void shouldRejectMultipleXCorrelationIDHeaders() {
+    public void shouldRejectMultipleCorrelationIdHeaders() {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "Two");
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
         assertThat(response.getHeaders().get("Warning"), is(singletonList(
@@ -81,36 +81,47 @@ public class CorrelationIDHeaderIT {
     }
 
     @Test
-    public void shouldAcceptXCorrelationIDHeader() {
+    public void shouldAcceptCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
     @Test
-    public void shouldAcceptDuplicateXCorrelationIDHeaders() {
+    public void shouldAcceptDuplicateCorrelationIdHeaders() {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "One");
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
-    public void shouldIgnoreXCorrelationIDHeaderForWrongPath() {
-        final ResponseEntity<String> response = callWith(new HttpHeaders());
+    public void shouldIgnoreCorrelationIdHeaderForWrongPath() {
+        final ResponseEntity<String> response = callWith(new HttpHeaders(),
+                "test");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
-    private ResponseEntity<String> callWith(final HttpHeaders headers) {
-        return rest.exchange(new RequestEntity<In>(headers, GET,
-                        URI.create(format("http://localhost:%d/test", port))),
+    public void shouldAutomateCorrelationIdHeader() {
+        final HttpHeaders headers = new HttpHeaders();
+        final ResponseEntity<String> response = callWith(headers,
+                "automated");
+
+        assertThat(response.getStatusCode(), is(OK));
+        assertThat(response.getHeaders().containsKey("Warning"), is(false));
+    }
+
+    private ResponseEntity<String> callWith(final HttpHeaders headers,
+            final String uri) {
+        return rest.exchange(new RequestEntity<In>(headers, GET, URI.create(
+                        format("http://localhost:%d/%s", port, uri))),
                 String.class);
     }
 }
