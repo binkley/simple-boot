@@ -3,7 +3,7 @@
 ## Modules
 
 * [common](common/) - Code shared by other modules
-* [configish](configish) - Example config service
+* [config](config) - Spring Cloud Config server
 * [local](local/) - "Local" service demonstrating GET calling to POST
 * [remote](remote/) - "Remote" service demonstrating POST
 
@@ -16,14 +16,13 @@
 - Example auditing, prints to log.
 - Audit controller for querying.
 
-### Mock configuration service
-
-Configish is for a feign client to a foreign configuration service from Spring
-cloud config server.
-
 ### Management
 
 All management endpoints moved to `/admin`.
+
+### Spring Cloud config
+
+Spring Cloud Config server against a local git repo.
 
 ### Health
 
