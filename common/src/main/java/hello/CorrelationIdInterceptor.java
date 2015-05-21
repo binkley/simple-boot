@@ -1,7 +1,9 @@
 package hello;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -10,12 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 
 /**
@@ -26,19 +25,16 @@ import static java.util.UUID.randomUUID;
  */
 @Component
 @ConditionalOnProperty("headers.correlation-id.client.paths")
+@ConfigurationProperties(prefix = "headers.correlation-id.client",
+        ignoreUnknownFields = false)
 public class CorrelationIdInterceptor
         implements ClientHttpRequestInterceptor {
-    private static final Pattern comma = Pattern.compile("\\s*,\\s*");
     private static final PathMatcher matcher = new AntPathMatcher();
 
-    private final List<String> paths;
-
-    @Inject
-    public CorrelationIdInterceptor(
-            @Value("${headers.correlation-id.client.paths}")
-            final String paths) {
-        this.paths = asList(comma.split(paths));
-    }
+    @NotEmpty
+    @Setter
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private List<String> paths;
 
     @Override
     public ClientHttpResponse intercept(final HttpRequest request,
