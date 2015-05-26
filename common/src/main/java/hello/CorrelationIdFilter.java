@@ -19,6 +19,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import static java.lang.String.format;
+import static java.net.InetAddress.getByName;
 import static java.util.Collections.list;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
@@ -82,8 +83,9 @@ public class CorrelationIdFilter
         final String message = format(format, "X-Correlation-ID");
         response.setHeader("Warning",
                 format("%d %s:%d \"%s\"", WC_CORRELATION_ID,
-                        request.getLocalName(), request.getLocalPort(),
-                        message));
+                        getByName(request.getLocalName()).
+                                getCanonicalHostName(),
+                        request.getLocalPort(), message));
         response.sendError(SC_BAD_REQUEST, message);
     }
 }

@@ -14,10 +14,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.net.URI;
+import java.net.UnknownHostException;
 
 import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
+import static java.net.InetAddress.getLoopbackAddress;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.http.HttpMethod.GET;
@@ -62,22 +65,37 @@ public class CorrelationIDHeaderIT {
         final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                format("%d localhost:%d \"Missing X-Correlation-ID header\"",
-                        WC_CORRELATION_ID, port))));
+        assertThat(response.getHeaders().get("Warning"), anyOf(is(
+                singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(), port))),
+                is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test
-    public void shouldRejectMultipleCorrelationIdHeaders() {
+    public void shouldRejectMultipleCorrelationIdHeaders()
+            throws UnknownHostException {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "Two");
         final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                format("%d localhost:%d \"Multiple X-Correlation-ID headers\"",
-                        WC_CORRELATION_ID, port))));
+        assertThat(response.getHeaders().get("Warning"), anyOf(is(
+                singletonList(
+                        format("%d %s:%d \"Multiple X-Correlation-ID headers\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(), port))),
+                is(singletonList(
+                        format("%d %s:%d \"Multiple X-Correlation-ID headers\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test

@@ -27,7 +27,9 @@ import java.net.URI;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
+import static java.net.InetAddress.getLoopbackAddress;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -70,9 +72,16 @@ public class HelloWorldIT {
         final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                format("%d localhost:%d \"Missing X-Correlation-ID header\"",
-                        WC_CORRELATION_ID, port))));
+        assertThat(response.getHeaders().get("Warning"), anyOf(
+                is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(),
+                                port))), is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test
