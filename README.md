@@ -24,6 +24,13 @@ All management endpoints moved to `/admin`.
 
 Spring Cloud Config server against a local git repo.
 
+*TODO*: Move config repo to GitHub.
+
+### Error handling
+
+See `X-Correlation-ID` handling in
+[CorrelationID*](common/src/main/java/hellp).
+
 ### Health
 
 Simple health indicator for a remote service.
