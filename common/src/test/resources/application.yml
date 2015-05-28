@@ -1,6 +1,9 @@
 headers:
   correlation-id:
-    paths: /test
+    client:
+      paths: /automated
+    server:
+      paths: /automated, /test
 
 security:
   basic:

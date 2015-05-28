@@ -30,17 +30,19 @@ import static org.springframework.web.context.request.RequestContextHolder.curre
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  * @todo Remote when underlying Feign issue is resolved
+ * @todo Does this mess up any headers added by Netflix/Spring?
  */
 @Component
 @ConditionalOnClass(Feign.class)
-public class HeadersFeignInterceptor
+public class FeignHeadersInterceptor
         implements RequestInterceptor {
     @Override
     public void apply(final RequestTemplate template) {
         final HttpServletRequest request
                 = ((ServletRequestAttributes) currentRequestAttributes())
                 .getRequest();
-        for (final String header : list(request.getHeaderNames()))
-            template.header(header, list(request.getHeaders(header)));
+        list(request.getHeaderNames()).stream().
+                forEach(header -> template.
+                        header(header, list(request.getHeaders(header))));
     }
 }

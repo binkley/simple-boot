@@ -15,4 +15,9 @@ public class TestController {
     public String test() {
         return "test";
     }
+
+    @RequestMapping("/automated")
+    public String automated() {
+        return "automated";
+    }
 }

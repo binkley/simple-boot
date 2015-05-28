@@ -15,7 +15,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NON_AUTHORITATIVE_INFORM
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  * @todo Needs documentation
- * @see HeadersFeignInterceptor Why execution.isolation.strategy?
+ * @see FeignHeadersInterceptor Why execution.isolation.strategy?
  */
 @Component
 public class HystrixRemoteHello {

@@ -23,8 +23,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.net.URI;
 
 import static com.jayway.jsonassert.JsonAssert.with;
+import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
+import static java.net.InetAddress.getLoopbackAddress;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -50,15 +53,23 @@ public class RemoteHelloIT {
     }
 
     @Test
-    public void shouldRequireXCorrelationIDHeader() {
+    public void shouldRequireCorrelationIDHeader() {
         final ResponseEntity<String> response = rest.exchange(
                 new RequestEntity<String>(POST, URI.create(
                         format("http://localhost:%d/greet", port))),
                 String.class);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
+        assertThat(response.getHeaders().get("Warning"), anyOf(
+                is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(),
+                                port))), is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test

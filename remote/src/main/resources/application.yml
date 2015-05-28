@@ -4,7 +4,8 @@ endpoints:
 
 headers:
   correlation-id:
-    paths: /greet
+    server:
+      paths: /greet
 
 info:
   build:

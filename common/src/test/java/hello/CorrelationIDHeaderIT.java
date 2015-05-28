@@ -14,9 +14,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.net.URI;
+import java.net.UnknownHostException;
 
+import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
+import static java.net.InetAddress.getLoopbackAddress;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.http.HttpMethod.GET;
@@ -46,7 +50,7 @@ public class CorrelationIDHeaderIT {
     }
 
     @Test
-    public void shouldXCorrelationIDHeaderRequiredOnlyIfConfigured() {
+    public void shouldCorrelationIdHeaderRequiredOnlyIfConfigured() {
         final ResponseEntity<String> response = rest.exchange(
                 new RequestEntity<String>(GET, URI.create(
                         format("http://localhost:%d/heartbeat", port))),
@@ -56,58 +60,86 @@ public class CorrelationIDHeaderIT {
     }
 
     @Test
-    public void shouldRejectMissingXCorrelationIDHeader() {
+    public void shouldRejectMissingCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
+        assertThat(response.getHeaders().get("Warning"), anyOf(is(
+                singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(), port))),
+                is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test
-    public void shouldRejectMultipleXCorrelationIDHeaders() {
+    public void shouldRejectMultipleCorrelationIdHeaders()
+            throws UnknownHostException {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "Two");
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Multiple X-Correlation-ID headers\"")));
+        assertThat(response.getHeaders().get("Warning"), anyOf(is(
+                singletonList(
+                        format("%d %s:%d \"Multiple X-Correlation-ID headers\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(), port))),
+                is(singletonList(
+                        format("%d %s:%d \"Multiple X-Correlation-ID headers\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test
-    public void shouldAcceptXCorrelationIDHeader() {
+    public void shouldAcceptCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
     @Test
-    public void shouldAcceptDuplicateXCorrelationIDHeaders() {
+    public void shouldAcceptDuplicateCorrelationIdHeaders() {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "One");
-        final ResponseEntity<String> response = callWith(headers);
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
-    public void shouldIgnoreXCorrelationIDHeaderForWrongPath() {
-        final ResponseEntity<String> response = callWith(new HttpHeaders());
+    public void shouldIgnoreCorrelationIdHeaderForWrongPath() {
+        final ResponseEntity<String> response = callWith(new HttpHeaders(),
+                "test");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
-    private ResponseEntity<String> callWith(final HttpHeaders headers) {
-        return rest.exchange(new RequestEntity<In>(headers, GET,
-                        URI.create(format("http://localhost:%d/test", port))),
+    public void shouldAutomateCorrelationIdHeader() {
+        final HttpHeaders headers = new HttpHeaders();
+        final ResponseEntity<String> response = callWith(headers,
+                "automated");
+
+        assertThat(response.getStatusCode(), is(OK));
+        assertThat(response.getHeaders().containsKey("Warning"), is(false));
+    }
+
+    private ResponseEntity<String> callWith(final HttpHeaders headers,
+            final String uri) {
+        return rest.exchange(new RequestEntity<In>(headers, GET, URI.create(
+                        format("http://localhost:%d/%s", port, uri))),
                 String.class);
     }
 }

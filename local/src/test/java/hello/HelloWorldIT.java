@@ -25,8 +25,11 @@ import javax.inject.Inject;
 import java.net.URI;
 
 import static com.jayway.jsonassert.JsonAssert.with;
+import static hello.CorrelationIdFilter.WC_CORRELATION_ID;
 import static java.lang.String.format;
+import static java.net.InetAddress.getLoopbackAddress;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -49,6 +52,10 @@ public class HelloWorldIT {
 
     @Inject
     private FeignRemoteHello feign;
+    @Value("${security.user.name:user}")
+    private String user;
+    @Value("${security.user.password}")
+    private String password;
 
     private TestRestTemplate rest;
 
@@ -56,17 +63,25 @@ public class HelloWorldIT {
     public void setUp()
             throws Exception {
         reset(feign);
-        rest = new TestRestTemplate("user", "secret");
+        rest = new TestRestTemplate(user, password);
     }
 
     @Test
-    public void shouldRejectMissingXCorrelationIDHeader() {
+    public void shouldRejectMissingCorrelationIDHeader() {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), is(singletonList(
-                "299 localhost \"Missing X-Correlation-ID header\"")));
+        assertThat(response.getHeaders().get("Warning"), anyOf(
+                is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostName(),
+                                port))), is(singletonList(
+                        format("%d %s:%d \"Missing X-Correlation-ID header\"",
+                                WC_CORRELATION_ID,
+                                getLoopbackAddress().getHostAddress(),
+                                port)))));
     }
 
     @Test
