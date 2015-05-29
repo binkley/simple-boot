@@ -1,5 +1,6 @@
 package hello;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.net.UnknownHostException;
@@ -17,21 +18,37 @@ import static java.time.ZoneId.systemDefault;
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  */
+@Builder
 @Data
 public class Heartbeat {
     // Field order determines JSON order
-    private final String service;
-    private final String startTime = ofInstant(
-            ofEpochMilli(getRuntimeMXBean().getStartTime()), systemDefault()).
-            toString();
-    private final String timestamp = now().toString();
-    private final String hostname;
+    private String service;
+    private String startTime;
+    private String timestamp;
+    private String hostname;
+    private int port;
 
-    private final int port;
+    /** Constructs a new {@code Heartbeat} for JSON binding. */
+    public Heartbeat() {}
 
+    /** Constructs a new {@code Heartbeat} for {@link HeartbeatBuilder#build()}. */
+    public Heartbeat(final String service, final String startTime,
+            final String timestamp, final String hostname, final int port) {
+        this.service = service;
+        this.startTime = startTime;
+        this.timestamp = timestamp;
+        this.hostname = hostname;
+        this.port = port;
+    }
+
+    /** Constructs a new {@code Heartbeat} for {@link HeartbeatController#beat()}. */
     public Heartbeat(final String service, final int port)
             throws UnknownHostException {
         this.service = service;
+        startTime = ofInstant(ofEpochMilli(getRuntimeMXBean().getStartTime()),
+                systemDefault()).
+                toString();
+        timestamp = now().toString();
         hostname = getLocalHost().getHostName();
         this.port = port;
     }
