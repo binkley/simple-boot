@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.net.UnknownHostException;
 
+import static java.lang.String.format;
 import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 import static java.net.InetAddress.getLocalHost;
 import static java.time.Instant.ofEpochMilli;
@@ -21,6 +22,10 @@ import static java.time.ZoneId.systemDefault;
 @Builder
 @Data
 public class Heartbeat {
+    private static final String systemStartTime = ofInstant(
+            ofEpochMilli(getRuntimeMXBean().getStartTime()), systemDefault()).
+            toString();
+
     // Field order determines JSON order
     private String service;
     private String startTime;
@@ -45,11 +50,23 @@ public class Heartbeat {
     public Heartbeat(final String service, final int port)
             throws UnknownHostException {
         this.service = service;
-        startTime = ofInstant(ofEpochMilli(getRuntimeMXBean().getStartTime()),
-                systemDefault()).
-                toString();
+        startTime = systemStartTime;
         timestamp = now().toString();
         hostname = getLocalHost().getHostName();
         this.port = port;
+    }
+
+    @Override
+    public String toString() {
+        return format("%s://%s:%d/%s@%d", service, hostname, port, startTime,
+                beats());
+    }
+
+    /**
+     * @see <a href="http://en.wikipedia.org/wiki/Swatch_Internet_Time">Swatch
+     * Internet Time</a>
+     */
+    private int beats() {
+        return (int) (getRuntimeMXBean().getUptime() / 86400);
     }
 }
