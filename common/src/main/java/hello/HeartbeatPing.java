@@ -8,31 +8,43 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.String.format;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * {@code HeartbeatPing} <b>needs documentation</b>.
+ * {@code HeartbeatPing} is a logging Ribbon ping.
  *
  * @author <a href="mailto:binkley@alumni.rice.edu">B. K. Oxley (binkley)</a>
- * @todo Needs documentation.
- * @todo What about Server#isReadyToServe()?
+ * @todo What about {@link Server#isReadyToServe()}?
+ * @todo Get into the per-service context, i.e., {@link RibbonLogging}
  */
 @Component
 public class HeartbeatPing
         implements IPing {
     private static final Logger log = getLogger(HeartbeatPing.class);
 
+    private final ConcurrentHashMap<Server, AtomicBoolean> ups
+            = new ConcurrentHashMap<>();
+
     @Override
     public boolean isAlive(final Server server) {
+        final AtomicBoolean up = ups.
+                computeIfAbsent(server, $ -> new AtomicBoolean(true));
         try {
-            new RestTemplate().getForEntity(
-                    URI.create(format("http://%s/heartbeat", server)),
-                    Heartbeat.class);
+            final Heartbeat beat = new RestTemplate().
+                    getForEntity(
+                            URI.create(format("http://%s/heartbeat", server)),
+                            Heartbeat.class).
+                    getBody();
+            if (up.compareAndSet(false, true))
+                log.warn("Heartbeat back for {}: {}", server, beat);
             return true;
         } catch (final RestClientException ignored) {
-            log.warn("Heartbeat failed for {}", server);
+            if (up.compareAndSet(true, false))
+                log.warn("Heartbeat gone for {}", server);
             return false;
         }
     }
