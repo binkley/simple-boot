@@ -15,6 +15,13 @@
     <name>Rest Common</name>
     <description>Features for all services</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.netflix.archaius</groupId>
+            <artifactId>archaius-core</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
