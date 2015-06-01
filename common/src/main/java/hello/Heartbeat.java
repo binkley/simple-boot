@@ -52,7 +52,7 @@ public class Heartbeat {
         this.service = service;
         startTime = systemStartTime;
         timestamp = now().toString();
-        hostname = getLocalHost().getHostName();
+        hostname = getLocalHost().getCanonicalHostName();
         this.port = port;
     }
 
