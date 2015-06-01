@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 import java.net.UnknownHostException;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -32,7 +33,14 @@ public class HeartbeatController {
     }
 
     @RequestMapping(value = "/heartbeat", method = GET)
-    public Heartbeat beat()
+    public String beatText()
+            throws UnknownHostException {
+        return new Heartbeat(service, port).toString();
+    }
+
+    @RequestMapping(value = "/heartbeat", method = GET,
+            produces = APPLICATION_JSON_VALUE)
+    public Heartbeat beatJson()
             throws UnknownHostException {
         return new Heartbeat(service, port);
     }
