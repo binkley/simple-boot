@@ -22,9 +22,6 @@ logging:
     org.springframework: WARN
     org.xnio: WARN
 
-management:
-  context-path: /admin
-
 security:
   basic:
     enabled: false

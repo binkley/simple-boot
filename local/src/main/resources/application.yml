@@ -22,9 +22,6 @@ logging:
     org.springframework: WARN
     org.xnio: WARN
 
-management:
-  context-path: /admin
-
 remote-hello:
   ribbon:
     listOfServers: bad-host:4444, localhost:8081
