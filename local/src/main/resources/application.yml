@@ -27,7 +27,7 @@ management:
 
 remote-hello:
   ribbon:
-    listOfServers: localhost:8081
+    listOfServers: bad-host:4444, localhost:8081
 
 security:
   basic:

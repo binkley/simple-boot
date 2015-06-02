@@ -37,7 +37,7 @@ Simple health indicator for a remote service.
 
 ### Heartbeat
 
-A simple timestamp endpoint on `/heartbeat`.
+A simple timestamp endpoint on `/heartbeat`.  Text vs JSON.
 
 ### Logging
 
