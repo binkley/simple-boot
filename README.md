@@ -7,6 +7,10 @@
 * [local](local/) - "Local" service demonstrating GET calling to POST
 * [remote](remote/) - "Remote" service demonstrating POST
 
+## Errata
+
+* Release 15 is bad.
+
 ## Features
 
 ### Spring Boot
