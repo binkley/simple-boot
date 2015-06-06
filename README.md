@@ -33,7 +33,7 @@ See `X-Correlation-ID` handling in
 
 ### Health
 
-Simple health indicator for a remote service.
+Simple health indicator for a remote service.  Several OS/JVM-level checks.
 
 ### Heartbeat
 
