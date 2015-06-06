@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
- * {@code CorrelationIDHeaderIT} provides integration testing for the {@code
+ * {@code CorrelationIdHeaderIT} provides integration testing for the {@code
  * X-Correlation-ID} header.
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
@@ -37,7 +37,7 @@ import static org.springframework.http.HttpStatus.OK;
 @SpringApplicationConfiguration(classes = TestMain.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=0")
-public class CorrelationIDHeaderIT {
+public class CorrelationIdHeaderIT {
     @Value("${local.server.port}")
     private int port;
 
