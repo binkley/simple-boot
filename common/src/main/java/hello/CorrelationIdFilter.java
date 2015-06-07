@@ -62,10 +62,10 @@ public class CorrelationIdFilter
             accept(request, response, filterChain, headers.first());
             return;
         case 0:
-            reject(request, response, "Missing %s header");
+            reject(request, response, "Missing X-Correlation-ID header");
             return;
         default:
-            reject(request, response, "Multiple %s headers");
+            reject(request, response, "Multiple X-Correlation-ID headers");
         }
     }
 
@@ -78,9 +78,8 @@ public class CorrelationIdFilter
     }
 
     private static void reject(final HttpServletRequest request,
-            final HttpServletResponse response, final String format)
+            final HttpServletResponse response, final String message)
             throws IOException {
-        final String message = format(format, "X-Correlation-ID");
         response.setHeader("Warning",
                 format("%d %s:%d \"%s\"", WC_CORRELATION_ID,
                         getByName(request.getLocalName()).

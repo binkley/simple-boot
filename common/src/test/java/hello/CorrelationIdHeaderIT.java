@@ -1,7 +1,6 @@
 package hello;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,12 +117,11 @@ public class CorrelationIdHeaderIT {
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
-    @Ignore("Should X-Correlation-ID be required or automated?")
     @Test
     public void shouldAutomateCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseEntity<String> response = callWith(headers,
-                "correlated");
+                "automated");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("X-Correlated-ID"), is(true));
