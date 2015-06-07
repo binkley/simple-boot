@@ -1,6 +1,7 @@
 package hello;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,10 +52,8 @@ public class CorrelationIdHeaderIT {
 
     @Test
     public void shouldCorrelationIdHeaderRequiredOnlyIfConfigured() {
-        final ResponseEntity<String> response = rest.exchange(
-                new RequestEntity<String>(GET, URI.create(
-                        format("http://localhost:%d/heartbeat", port))),
-                String.class);
+        final HttpHeaders headers = new HttpHeaders();
+        final ResponseEntity<String> response = callWith(headers, "test");
 
         assertThat(response.getStatusCode(), is(OK));
     }
@@ -62,7 +61,7 @@ public class CorrelationIdHeaderIT {
     @Test
     public void shouldRejectMissingCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
-        final ResponseEntity<String> response = callWith(headers, "test");
+        final ResponseEntity<String> response = callWith(headers, "correlated");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
         assertThat(response.getHeaders().get("Warning"), anyOf(is(
@@ -83,7 +82,7 @@ public class CorrelationIdHeaderIT {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "Two");
-        final ResponseEntity<String> response = callWith(headers, "test");
+        final ResponseEntity<String> response = callWith(headers, "correlated");
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
         assertThat(response.getHeaders().get("Warning"), anyOf(is(
@@ -102,7 +101,7 @@ public class CorrelationIdHeaderIT {
     public void shouldAcceptCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
-        final ResponseEntity<String> response = callWith(headers, "test");
+        final ResponseEntity<String> response = callWith(headers, "correlated");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
@@ -113,26 +112,21 @@ public class CorrelationIdHeaderIT {
         final HttpHeaders headers = new HttpHeaders();
         headers.add("X-Correlation-ID", "One");
         headers.add("X-Correlation-ID", "One");
-        final ResponseEntity<String> response = callWith(headers, "test");
+        final ResponseEntity<String> response = callWith(headers, "correlated");
 
         assertThat(response.getStatusCode(), is(OK));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 
-    public void shouldIgnoreCorrelationIdHeaderForWrongPath() {
-        final ResponseEntity<String> response = callWith(new HttpHeaders(),
-                "test");
-
-        assertThat(response.getStatusCode(), is(OK));
-        assertThat(response.getHeaders().containsKey("Warning"), is(false));
-    }
-
+    @Ignore("Should X-Correlation-ID be required or automated?")
+    @Test
     public void shouldAutomateCorrelationIdHeader() {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseEntity<String> response = callWith(headers,
-                "automated");
+                "correlated");
 
         assertThat(response.getStatusCode(), is(OK));
+        assertThat(response.getHeaders().containsKey("X-Correlated-ID"), is(true));
         assertThat(response.getHeaders().containsKey("Warning"), is(false));
     }
 

@@ -16,8 +16,8 @@ public class TestController {
         return "test";
     }
 
-    @RequestMapping("/automated")
+    @RequestMapping("/correlated")
     public String automated() {
-        return "automated";
+        return "correlated";
     }
 }
