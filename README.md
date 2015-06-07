@@ -53,6 +53,10 @@ headers from caller through to Feign target.  Example required header,
 
 Local calls remote with hystrix and fallback.
 
+### RAML
+
+Example of RAML in [remote](remote/src/main/resources/hello/remote-hello.raml).
+
 ### Spring Actuator
 
 Example health indicator with `hello.health.RemoteHello`.
