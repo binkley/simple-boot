@@ -18,7 +18,6 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -58,7 +57,6 @@ public class RemoteHelloControllerTest {
                 content("{\"name\":\"Bob\"}").
                 accept(APPLICATION_JSON)).
                 andExpect(status().isOk()).
-                andExpect(header().string("X-Correlation-ID", "Fred")).
                 andExpect(content().
                         contentTypeCompatibleWith(APPLICATION_JSON)).
                 andExpect(jsonPath("$.message",
