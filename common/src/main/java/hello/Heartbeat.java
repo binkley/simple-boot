@@ -46,7 +46,7 @@ public class Heartbeat {
         this.port = port;
     }
 
-    /** Constructs a new {@code Heartbeat} for {@link HeartbeatController#beat()}. */
+    /** Constructs a new {@code Heartbeat} for {@link HeartbeatController}. */
     public Heartbeat(final String service, final int port)
             throws UnknownHostException {
         this.service = service;

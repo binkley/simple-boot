@@ -1,0 +1,38 @@
+#%RAML 0.8
+---
+title: Remote Hello API
+baseUri: http://localhost
+version: 1
+mediaType: application/json
+
+traits:
+  - correlated:
+      usage: Apply this trait when requiring an `X-Correlation-ID` header
+      description: Trace requests end-to-end with an `X-Correlation-ID` header
+      headers:
+        X-Correlation-ID:
+          description: |
+            A unique identifier, e.g. UUID, for end-to-end request tracing.
+            Responses return the same identifier used in requests.
+          displayName: Correlation ID
+          required: true
+          type: string
+
+/greet:
+  displayName: Greet
+  is: [correlated]
+  post:
+    body:
+      application/json:
+        example: |
+          {"name":"Bob"}
+        schema: |
+          {"name":{"required":true,"type":"string"}}
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {"message":"Hats off to you, Bob!"}
+            schema: |
+              {"message":{"required":true,"type":"string"}}
