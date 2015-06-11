@@ -33,7 +33,6 @@
     </parent>
 
     <properties>
-        <cors-filter.version>2.4</cors-filter.version>
         <java.version>1.8</java.version>
         <javanica.version>1.4.7</javanica.version>
         <jsonpath.version>2.0.0</jsonpath.version>
@@ -43,8 +42,7 @@
         <raml-tester.version>0.8.0</raml-tester.version>
         <snakeyaml.version>1.13</snakeyaml.version> <!-- All on same page -->
         <spring-cloud.version>1.0.1.RELEASE</spring-cloud.version>
-        <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
-        <swagger-spring-mvc-ui.version>0.4</swagger-spring-mvc-ui.version>
+        <swagger.version>2.0.1</swagger.version>
     </properties>
 
     <repositories>
@@ -139,21 +137,16 @@
             <version>${javanica.version}</version>
         </dependency>
         <dependency>
-            <!-- Needed by Swagger JavaScript -->
-            <groupId>com.thetransactioncompany</groupId>
-            <artifactId>cors-filter</artifactId>
-            <version>${cors-filter.version}</version>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.mangofactory</groupId>
-            <artifactId>swagger-springmvc</artifactId>
-            <version>${swagger-springmvc.version}</version>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.ajar</groupId>
-            <artifactId>swagger-spring-mvc-ui</artifactId>
-            <version>${swagger-spring-mvc-ui.version}</version>
-        </dependency>
+
         <dependency>
             <!-- Swagger work around - Tomcat only -->
             <groupId>org.apache.tomcat.embed</groupId>
