@@ -9,7 +9,7 @@ traits:
   - correlated:
       usage: Apply this trait when requiring an `X-Correlation-ID` header
       description: Trace requests end-to-end with an `X-Correlation-ID` header
-      headers:
+      headers: &correlationId
         X-Correlation-ID:
           description: |
             A unique identifier, e.g. UUID, for end-to-end request tracing.
