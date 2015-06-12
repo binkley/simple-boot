@@ -8,6 +8,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
+import static java.util.Arrays.asList;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 /**
@@ -30,13 +31,26 @@ import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 public class SwaggerConfiguration {
     @Bean
     public Docket setupSwaggerApi(final Environment env) {
-        return new Docket(SWAGGER_2).apiInfo(
-                new ApiInfo(env.getProperty("swagger.api.title"),
+        return new Docket(SWAGGER_2).
+                apiInfo(new ApiInfo(env.getProperty("swagger.api.title"),
                         env.getProperty("swagger.api.description"),
                         env.getProperty("swagger.api.version"),
                         env.getProperty("swagger.api.terms-of-service.url"),
                         env.getProperty("swagger.api.contact.email-address"),
                         env.getProperty("swagger.api.license.name"),
-                        env.getProperty("swagger.api.license.url")));
+                        env.getProperty("swagger.api.license.url"))).
+                select().paths(SwaggerConfiguration::notManagement).
+                build();
+    }
+
+    /** @todo How to automate? */
+    private static boolean notManagement(final String path) {
+        if (path.startsWith("/env/") || path.startsWith("/metrics/"))
+            return false;
+        return !asList("/", "/archaius", "/autoconfig", "/beans",
+                "/configprops", "/dump", "/env", "/error", "/health",
+                "/heartbeat", "/info", "/metrics", "/mappings", "/pause",
+                "/refresh", "/resume", "/restart", "/shutdown", "/trace")
+                .contains(path);
     }
 }
