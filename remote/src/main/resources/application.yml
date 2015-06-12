@@ -15,12 +15,7 @@ info:
     version: @project.version@
 
 logging:
-  level:
-    com.mangofactory: WARN
-    com.netflix: WARN
-    io.undertow: WARN
-    org.springframework: WARN
-    org.xnio: WARN
+  level.: WARN
 
 security:
   basic:
