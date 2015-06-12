@@ -4,6 +4,8 @@ endpoints:
 
 headers:
   correlation-id:
+    client:
+      paths: /remote-hello/greet
     server:
       paths: /hello/*
 
