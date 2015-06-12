@@ -15,6 +15,10 @@
 
 ### Spring Boot
 
+- Context roots:
+  * Hello World: `/hello-world`
+  * Remote Hello: `/remote-hello`
+
 ### Audit trail
 
 - Example auditing, prints to log.
@@ -56,6 +60,10 @@ headers from caller through to Feign target.  Example required header,
 ### Netflix Hystrix
 
 Local calls remote with hystrix and fallback.
+
+### RAML
+
+Example of RAML in [remote](remote/src/main/resources/hello/remote-hello.raml).
 
 ### Spring Actuator
 

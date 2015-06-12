@@ -4,8 +4,10 @@ endpoints:
 
 headers:
   correlation-id:
+    client:
+      paths: /remote-hello/greet
     server:
-      paths: /hello/*
+      paths: /hello-world/hello/*
 
 info:
   build:
@@ -15,12 +17,7 @@ info:
     version: @project.version@
 
 logging:
-  level:
-    com.mangofactory: WARN
-    com.netflix: WARN
-    io.undertow: WARN
-    org.springframework: WARN
-    org.xnio: WARN
+  level.: WARN
 
 remote-hello:
   ribbon:
@@ -33,6 +30,7 @@ security:
     password: secret
 
 server:
+  context-path: /hello-world
   port: 8080
 
 spring:

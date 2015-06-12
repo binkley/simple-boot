@@ -7,7 +7,7 @@
 
     <groupId>hm.binkley.labs</groupId>
     <artifactId>simple-boot</artifactId>
-    <version>16</version>
+    <version>17</version>
     <packaging>pom</packaging>
 
     <name>Parent</name>
@@ -40,6 +40,8 @@
         <lombok.version>1.16.4</lombok.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <metrics.version>3.1.0</metrics.version>
+        <raml-tester.version>0.8.0</raml-tester.version>
+        <snakeyaml.version>1.13</snakeyaml.version> <!-- All on same page -->
         <spring-cloud.version>1.0.1.RELEASE</spring-cloud.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
         <swagger-spring-mvc-ui.version>0.4</swagger-spring-mvc-ui.version>
@@ -99,6 +101,11 @@
             <version>${lombok.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -174,6 +181,12 @@
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path-assert</artifactId>
             <version>${jsonpath.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>guru.nidi.raml</groupId>
+            <artifactId>raml-tester</artifactId>
+            <version>${raml-tester.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

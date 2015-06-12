@@ -15,7 +15,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @FeignClient("remote-hello")
 public interface FeignRemoteHello {
-    @RequestMapping(value = "/greet", method = POST,
+    @RequestMapping(value = "/remote-hello/greet", method = POST,
             consumes = APPLICATION_JSON_VALUE)
     Greeting greet(@RequestBody final In in);
 }
