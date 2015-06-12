@@ -75,8 +75,7 @@ Simply configured Spring security on management endpoints.
 
 ### Swagger
 
-Root service path shows Swagger UI.  Requires Tomcat.  See [Swagger SpringMVC
-issue #15](https://github.com/adrianbk/swagger-springmvc-demo/issues/15).
+Root service path shows Swagger 2 UI.
 
 ### Testing
 
