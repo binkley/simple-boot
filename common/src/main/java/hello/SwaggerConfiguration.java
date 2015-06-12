@@ -25,6 +25,7 @@ import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
  * swagger.api.version}</td> <td>API Version</td></tr></table>
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
+ * @todo Configure API settings, et al, from Swagger YAML
  */
 @Configuration
 @ConditionalOnClass(Swagger2Controller.class)
@@ -39,6 +40,7 @@ public class SwaggerConfiguration {
                         env.getProperty("swagger.api.contact.email-address"),
                         env.getProperty("swagger.api.license.name"),
                         env.getProperty("swagger.api.license.url"))).
+                useDefaultResponseMessages(false).
                 select().paths(SwaggerConfiguration::notManagement).
                 build();
     }

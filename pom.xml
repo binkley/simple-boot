@@ -43,6 +43,7 @@
         <snakeyaml.version>1.13</snakeyaml.version> <!-- All on same page -->
         <spring-cloud.version>1.0.1.RELEASE</spring-cloud.version>
         <swagger.version>2.0.1</swagger.version>
+        <assertj-swagger.version>0.1.2</assertj-swagger.version>
     </properties>
 
     <repositories>
@@ -180,6 +181,12 @@
             <groupId>guru.nidi.raml</groupId>
             <artifactId>raml-tester</artifactId>
             <version>${raml-tester.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.robwin</groupId>
+            <artifactId>assertj-swagger</artifactId>
+            <version>${assertj-swagger.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

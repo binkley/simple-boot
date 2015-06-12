@@ -1,0 +1,46 @@
+swagger: "2.0"
+info:
+  title: Remote Hello API
+  version: v1
+
+basePath: /remote-hello
+
+paths:
+  /greet:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - name: in
+        description: |
+          Provides name of praiseworthy individual
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/In'
+      produces:
+      - application/json
+      responses:
+        200:
+          description: |
+            Warmly greets by name
+          schema:
+            $ref: '#/definitions/Greeting'
+
+definitions:
+  Greeting:
+    required:
+    - message
+    properties:
+      message:
+        description: |
+          The greeting message
+        type: string
+  In:
+    required:
+    - name
+    properties:
+      name:
+        description: |
+          The individual name
+        type: string
