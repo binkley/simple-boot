@@ -15,6 +15,10 @@
 
 ### Spring Boot
 
+- Context roots:
+  * Hello World: `/hello-world`
+  * Remote Hello: `/remote-hello`
+
 ### Audit trail
 
 - Example auditing, prints to log.
