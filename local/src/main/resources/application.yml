@@ -4,8 +4,10 @@ endpoints:
 
 headers:
   correlation-id:
+    client:
+      paths: /remote-hello/greet
     server:
-      paths: /hello/*
+      paths: /hello-world/hello/*
 
 info:
   build:
@@ -28,6 +30,7 @@ security:
     password: secret
 
 server:
+  context-path: /hello-world
   port: 8080
 
 spring:

@@ -72,12 +72,12 @@ public class HelloWorldIT {
         final ResponseEntity<String> response = callWith(headers);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), anyOf(
-                is(singletonList(
+        assertThat(response.getHeaders().get("Warning"), anyOf(is(
+                singletonList(
                         format("%d %s:%d \"Missing X-Correlation-ID header\"",
                                 WC_CORRELATION_ID,
-                                getLoopbackAddress().getHostName(),
-                                port))), is(singletonList(
+                                getLoopbackAddress().getHostName(), port))),
+                is(singletonList(
                         format("%d %s:%d \"Missing X-Correlation-ID header\"",
                                 WC_CORRELATION_ID,
                                 getLoopbackAddress().getHostAddress(),
@@ -130,7 +130,7 @@ public class HelloWorldIT {
 
     private ResponseEntity<String> callWith(final HttpHeaders headers) {
         return rest.exchange(new RequestEntity<In>(headers, GET, URI.create(
-                        format("http://localhost:%d/hello/Bob", port))),
+                format("http://localhost:%d/hello-world/hello/Bob", port))),
                 String.class);
     }
 }

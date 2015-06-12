@@ -54,18 +54,17 @@ public class RemoteHelloIT {
 
     @Test
     public void shouldRequireCorrelationIDHeader() {
-        final ResponseEntity<String> response = rest.exchange(
-                new RequestEntity<String>(POST, URI.create(
-                        format("http://localhost:%d/greet", port))),
-                String.class);
+        final ResponseEntity<String> response = rest
+                .exchange(new RequestEntity<String>(POST, greet()),
+                        String.class);
 
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
-        assertThat(response.getHeaders().get("Warning"), anyOf(
-                is(singletonList(
+        assertThat(response.getHeaders().get("Warning"), anyOf(is(
+                singletonList(
                         format("%d %s:%d \"Missing X-Correlation-ID header\"",
                                 WC_CORRELATION_ID,
-                                getLoopbackAddress().getHostName(),
-                                port))), is(singletonList(
+                                getLoopbackAddress().getHostName(), port))),
+                is(singletonList(
                         format("%d %s:%d \"Missing X-Correlation-ID header\"",
                                 WC_CORRELATION_ID,
                                 getLoopbackAddress().getHostAddress(),
@@ -79,8 +78,7 @@ public class RemoteHelloIT {
         headers.set("X-Correlation-ID", "Mary");
         headers.setContentType(APPLICATION_JSON);
         final RequestEntity<In> request = new RequestEntity<>(
-                In.builder().name("Bob").build(), headers, POST,
-                URI.create(format("http://localhost:%d/greet", port)));
+                In.builder().name("Bob").build(), headers, POST, greet());
         final ResponseEntity<String> response = rest.
                 exchange(request, String.class);
 
@@ -91,5 +89,10 @@ public class RemoteHelloIT {
                 isCompatibleWith(APPLICATION_JSON), is(true));
         with(response.getBody()).
                 assertEquals("$.message", "Hats off to you, Bob!");
+    }
+
+    private URI greet() {
+        return URI.create(format("http://localhost:%d/remote-hello/greet",
+                port));
     }
 }
