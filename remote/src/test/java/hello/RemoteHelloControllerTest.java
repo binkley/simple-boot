@@ -33,7 +33,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class RemoteHelloControllerTest {
     private static final RamlDefinition api = fromClasspath(
             RemoteHelloMain.class).
-            load("remote-hello.raml");
+            load("remote-hello.raml").
+            assumingBaseUri("http://api.binkley.hm:8081/remote-hello");
     private static final SimpleReportAggregator report
             = new SimpleReportAggregator();
 
