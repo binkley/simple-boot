@@ -40,7 +40,8 @@
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <metrics.version>3.1.0</metrics.version>
         <raml-tester.version>0.8.4</raml-tester.version>
-        <snakeyaml.version>1.16</snakeyaml.version> <!-- All on same page -->
+        <!-- SnakeYAML 1.14 removed VALUE from Tag -->
+        <snakeyaml.version>1.13</snakeyaml.version>
         <spring-cloud.version>1.0.2.RELEASE</spring-cloud.version>
         <swagger.version>2.2.2</swagger.version>
         <assertj-swagger.version>0.1.2</assertj-swagger.version>
