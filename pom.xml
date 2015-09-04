@@ -33,8 +33,10 @@
     </parent>
 
     <properties>
+        <assertj-swagger.version>0.1.2</assertj-swagger.version>
         <java.version>1.8</java.version>
         <javanica.version>1.4.14</javanica.version>
+        <jgitflow.version>1.0-m5.1</jgitflow.version>
         <jsonpath.version>2.0.0</jsonpath.version>
         <lombok.version>1.16.6</lombok.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
@@ -44,7 +46,6 @@
         <snakeyaml.version>1.13</snakeyaml.version>
         <spring-cloud.version>1.0.2.RELEASE</spring-cloud.version>
         <swagger.version>2.2.2</swagger.version>
-        <assertj-swagger.version>0.1.2</assertj-swagger.version>
     </properties>
 
     <repositories>
@@ -194,6 +195,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>${jgitflow.version}</version>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
