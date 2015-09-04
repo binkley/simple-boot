@@ -34,15 +34,15 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <javanica.version>1.4.7</javanica.version>
+        <javanica.version>1.4.14</javanica.version>
         <jsonpath.version>2.0.0</jsonpath.version>
-        <lombok.version>1.16.4</lombok.version>
+        <lombok.version>1.16.6</lombok.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <metrics.version>3.1.0</metrics.version>
-        <raml-tester.version>0.8.0</raml-tester.version>
-        <snakeyaml.version>1.13</snakeyaml.version> <!-- All on same page -->
-        <spring-cloud.version>1.0.1.RELEASE</spring-cloud.version>
-        <swagger.version>2.0.1</swagger.version>
+        <raml-tester.version>0.8.4</raml-tester.version>
+        <snakeyaml.version>1.16</snakeyaml.version> <!-- All on same page -->
+        <spring-cloud.version>1.0.2.RELEASE</spring-cloud.version>
+        <swagger.version>2.2.2</swagger.version>
         <assertj-swagger.version>0.1.2</assertj-swagger.version>
     </properties>
 
