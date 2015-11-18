@@ -1,12 +1,5 @@
 package hello;
 
-/**
- * {@code RemoteHelloIT} <strong>needs documentation</strong>.
- *
- * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
- * @todo Needs documentation
- */
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -12,7 +12,8 @@ import static io.github.robwin.swagger.test.SwaggerAssertions.assertThat;
 import static java.lang.String.format;
 
 /**
- * {@code RemoteHelloSwaggerApiIT} validates the implementation against the API.
+ * {@code RemoteHelloSwaggerApiIT} validates the implementation against the
+ * API.
  *
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  */
