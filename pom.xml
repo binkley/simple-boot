@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>hm.binkley.labs</groupId>
@@ -30,19 +33,31 @@
     </parent>
 
     <properties>
+        <!-- @formatter:off -->
         <assertj-swagger.version>0.1.2</assertj-swagger.version>
+        <buildplan-maven-plugin.version>1.1</buildplan-maven-plugin.version>
+        <generateBackupPoms>false</generateBackupPoms>
         <java.version>1.8</java.version>
-        <javanica.version>1.4.14</javanica.version>
-        <jgitflow.version>1.0-m5.1</jgitflow.version>
+        <javanica.version>1.4.18</javanica.version>
+        <jgitflow-maven-plugin.version>1.0-m5.1</jgitflow-maven-plugin.version>
         <jsonpath.version>2.0.0</jsonpath.version>
         <lombok.version>1.16.6</lombok.version>
+        <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+        <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+        <maven-testing-plugins.version>2.18.1</maven-testing-plugins.version>
+        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
+        <maven-java-formatter-plugin.version>0.4</maven-java-formatter-plugin.version>
+        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>2.5.2</maven-release-plugin.version>
+        <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <metrics.version>3.1.0</metrics.version>
-        <raml-tester.version>0.8.4</raml-tester.version>
-        <!-- SnakeYAML 1.14 removed VALUE from Tag -->
-        <snakeyaml.version>1.13</snakeyaml.version>
+        <raml-tester.version>0.8.5</raml-tester.version>
         <spring-cloud.version>1.0.2.RELEASE</spring-cloud.version>
         <swagger.version>2.2.2</swagger.version>
+        <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
+        <!-- @formatter:on -->
     </properties>
 
     <repositories>
@@ -84,11 +99,6 @@
             <version>${lombok.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>${snakeyaml.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -178,16 +188,70 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>fr.jcgay.maven.plugins</groupId>
+                <artifactId>buildplan-maven-plugin</artifactId>
+                <version>${buildplan-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
                 <groupId>external.atlassian.jgitflow</groupId>
                 <artifactId>jgitflow-maven-plugin</artifactId>
-                <version>${jgitflow.version}</version>
+                <version>${jgitflow-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>update-dependencies</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>update-properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- Sonatype OSS parent pom breaks intermodule dependencies otherwise -->
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven-clean-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven-dependency-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>download-sources</id>
+                        <goals>
+                            <goal>sources</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>download-javadocs</id>
+                        <configuration>
+                            <classifier>javadoc</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <compilerArgs>
-                        <arg>-parameters</arg>
+                        <compilerArg>-parameters</compilerArg>
+                        <compilerArg>-Xlint:all</compilerArg>
                     </compilerArgs>
                     <debug>true</debug>
                     <source>${java.version}</source>
@@ -198,9 +262,16 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
+                        <id>run-integration-tests</id>
+                        <phase>integration-test</phase>
                         <goals>
                             <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>run-verify</id>
+                        <phase>verify</phase>
+                        <goals>
                             <goal>verify</goal>
                         </goals>
                     </execution>
@@ -221,10 +292,6 @@
                         </dependency>
                     </requiresUnpack>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
