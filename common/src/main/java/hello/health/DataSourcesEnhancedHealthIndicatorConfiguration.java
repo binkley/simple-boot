@@ -1,42 +1,50 @@
-package hello;
+package hello.health;
 
-import hello.health.DataSourceEnhancedHealthIndicator;
-import org.springframework.boot.SpringApplication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.CompositeHealthIndicator;
 import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadata;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProvider;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProviders;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
-@EnableConfigurationProperties
-@EnableFeignClients
-@EnableHystrix
-@EnableSwagger2
-@SpringBootApplication
-public class HelloWorldMain {
-    public static void main(final String... args) {
-        SpringApplication.run(HelloWorldMain.class, args);
-    }
+import static java.util.Collections.emptyList;
 
-    /** @todo Why does auto-config misses config class? */
+/**
+ * {@code DataSourcesHealthIndicatorConfiguration} <strong>needs
+ * documentation</strong>.
+ *
+ * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
+ * @todo Fix Spring Configuration ordering so our bean replaces theirs rather
+ * than turning theirs off, then we can use the same config setting
+ */
+@Configuration
+@ConditionalOnBean(DataSource.class)
+//@ConditionalOnProperty(prefix = "management.health.db", name = "enabled",
+//        matchIfMissing = true)
+public class DataSourcesEnhancedHealthIndicatorConfiguration {
+    @Autowired
+    private HealthAggregator healthAggregator;
+
+    @Autowired(required = false)
+    private Map<String, DataSource> dataSources;
+
+    @Autowired(required = false)
+    private final Collection<DataSourcePoolMetadataProvider> metadataProviders
+            = emptyList();
+
     @Bean
     @Primary
-    public HealthIndicator dbHealthIndicator(
-            final HealthAggregator healthAggregator,
-            final Map<String, DataSource> dataSources,
-            final Collection<DataSourcePoolMetadataProvider> metadataProviders) {
+    public HealthIndicator dbHealthIndicator() {
         final DataSourcePoolMetadataProvider metadataProvider
                 = new DataSourcePoolMetadataProviders(metadataProviders);
         if (1 == dataSources.size()) {
@@ -47,8 +55,7 @@ public class HelloWorldMain {
         }
         final CompositeHealthIndicator composite
                 = new CompositeHealthIndicator(healthAggregator);
-        for (final Map.Entry<String, DataSource> entry : dataSources
-                .entrySet()) {
+        for (final Entry<String, DataSource> entry : dataSources.entrySet()) {
             final String name = entry.getKey();
             final DataSource dataSource = entry.getValue();
             composite.addHealthIndicator(name,
