@@ -5,6 +5,7 @@ import org.springframework.boot.actuate.health.CompositeHealthIndicator;
 import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadata;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProvider;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProviders;
@@ -29,8 +30,8 @@ import static java.util.Collections.emptyList;
  */
 @Configuration
 @ConditionalOnBean(DataSource.class)
-//@ConditionalOnProperty(prefix = "management.health.db", name = "enabled",
-//        matchIfMissing = true)
+@ConditionalOnProperty(prefix = "management.health.db", name = "enabled",
+        matchIfMissing = true)
 public class DataSourcesEnhancedHealthIndicatorConfiguration {
     @Autowired
     private HealthAggregator healthAggregator;
