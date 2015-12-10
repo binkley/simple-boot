@@ -5,6 +5,13 @@ headers:
     server:
       paths: /correlated
 
+logging:
+  level: WARN
+
 security:
   basic:
     enabled: false
+
+spring:
+  main:
+    show-banner: false
