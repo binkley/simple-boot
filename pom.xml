@@ -54,7 +54,7 @@
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <metrics.version>3.1.0</metrics.version>
         <raml-tester.version>0.8.5</raml-tester.version>
-        <spring-cloud.version>1.0.2.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Angel.SR4</spring-cloud.version>
         <swagger.version>2.2.2</swagger.version>
         <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
         <!-- @formatter:on -->
@@ -197,6 +197,7 @@
                 <artifactId>jgitflow-maven-plugin</artifactId>
                 <version>${jgitflow-maven-plugin.version}</version>
             </plugin>
+            <!-- Spring Cloud's new "London tube station not recognized
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
@@ -211,6 +212,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <!-- Sonatype OSS parent pom breaks intermodule dependencies otherwise -->
                 <artifactId>maven-enforcer-plugin</artifactId>
