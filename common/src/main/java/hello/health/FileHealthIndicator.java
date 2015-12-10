@@ -15,7 +15,7 @@ import static org.springframework.boot.actuate.health.Health.Builder;
  * @author <a href="mailto:boxley@thoughtworks.com">Brian Oxley</a>
  */
 @Component
-public class File
+public class FileHealthIndicator
         extends AbstractHealthIndicator {
     @Override
     protected void doHealthCheck(final Builder builder)

@@ -15,7 +15,7 @@ import static org.springframework.boot.actuate.health.Health.Builder;
  * @todo Check on Windows
  */
 @Component
-public class Memory
+public class MemoryHealthIndicator
         extends AbstractHealthIndicator {
     @Override
     protected void doHealthCheck(final Builder builder)

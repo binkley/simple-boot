@@ -18,7 +18,7 @@ import static org.springframework.boot.actuate.health.Health.Builder;
  * @todo Needs documentation
  */
 @Component
-public class Java
+public class JavaHealthIndicator
         extends AbstractHealthIndicator {
     @Override
     protected void doHealthCheck(final Builder builder)
