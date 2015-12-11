@@ -18,7 +18,6 @@ package hello.health;
 
 import org.springframework.boot.actuate.health.DataSourceHealthIndicator;
 import org.springframework.boot.actuate.health.Health.Builder;
-import org.springframework.jdbc.UncategorizedSQLException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -43,29 +42,37 @@ public class DataSourceEnhancedHealthIndicator
             final String query) {
         super(dataSource, query);
         this.dataSource = dataSource;
-        jdbcURL = jdbcURL(dataSource);
+        try {
+            jdbcURL = jdbcURL(dataSource);
+        } catch (final SQLException e) {
+            jdbcURL = null; // Try again later
+        }
     }
 
     @Override
     protected void doHealthCheck(final Builder builder)
             throws Exception {
         super.doHealthCheck(builder);
+        if (null == jdbcURL)
+            jdbcURL = jdbcURL(dataSource);
         builder.withDetail("jdbc-url", jdbcURL);
     }
 
     public void setDataSource(final DataSource dataSource) {
         super.setDataSource(dataSource);
         this.dataSource = dataSource;
-        jdbcURL = jdbcURL(dataSource);
+        try {
+            jdbcURL = jdbcURL(dataSource);
+        } catch (final SQLException e) {
+            jdbcURL = null; // Try again later
+        }
     }
 
-    private static String jdbcURL(final DataSource dataSource) {
+    private static String jdbcURL(final DataSource dataSource)
+            throws SQLException {
         final Connection conn = getConnection(dataSource);
         try {
             return conn.getMetaData().getURL();
-        } catch (final SQLException e) {
-            throw new UncategorizedSQLException("Cannot get metadata", null,
-                    e);
         } finally {
             releaseConnection(conn, dataSource);
         }
