@@ -1,3 +1,14 @@
+datasource:
+  bob:
+    driverClassName: org.h2.Driver
+    url: 'jdbc:h2:mem:bob;DB_CLOSE_ON_EXIT=FALSE'
+  nancy:
+    driverClassName: org.h2.Driver
+    url: 'jdbc:h2:mem:nancy;DB_CLOSE_ON_EXIT=FALSE'
+  wick-fowler:
+    driverClassName: org.h2.Driver
+    url: 'jdbc:h2:mem:tasty-chili;DB_CLOSE_ON_EXIT=FALSE'
+
 endpoints:
   health:
     sensitive: false
@@ -34,11 +45,14 @@ server:
   port: 8080
 
 spring:
-  datasource:
-    # Spring Boot managed d/b lifecycle
-    url: 'jdbc:h2:mem:;DB_CLOSE_ON_EXIT=FALSE'
   main:
     show_banner: false
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
 # TODO: Address Spring filtering
 swagger:
