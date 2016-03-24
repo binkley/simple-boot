@@ -34,14 +34,14 @@
 
     <properties>
         <!-- @formatter:off -->
-        <assertj-swagger.version>0.1.2</assertj-swagger.version>
-        <buildplan-maven-plugin.version>1.1</buildplan-maven-plugin.version>
+        <assertj-swagger.version>0.4.0</assertj-swagger.version>
+        <buildplan-maven-plugin.version>1.2</buildplan-maven-plugin.version>
         <generateBackupPoms>false</generateBackupPoms>
         <java.version>1.8</java.version>
-        <javanica.version>1.4.18</javanica.version>
+        <javanica.version>1.5.1</javanica.version>
         <jgitflow-maven-plugin.version>1.0-m5.1</jgitflow-maven-plugin.version>
-        <jsonpath.version>2.0.0</jsonpath.version>
-        <lombok.version>1.16.6</lombok.version>
+        <jsonpath.version>2.2.0</jsonpath.version>
+        <lombok.version>1.16.8</lombok.version>
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
@@ -53,9 +53,9 @@
         <maven-release-plugin.version>2.5.2</maven-release-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <metrics.version>3.1.0</metrics.version>
-        <raml-tester.version>0.8.5</raml-tester.version>
-        <spring-cloud.version>Angel.SR4</spring-cloud.version>
-        <swagger.version>2.2.2</swagger.version>
+        <raml-tester.version>0.8.8</raml-tester.version>
+        <spring-cloud.version>1.0.2.RELEASE</spring-cloud.version>
+        <swagger.version>2.4.0</swagger.version>
         <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
         <!-- @formatter:on -->
     </properties>
@@ -197,7 +197,6 @@
                 <artifactId>jgitflow-maven-plugin</artifactId>
                 <version>${jgitflow-maven-plugin.version}</version>
             </plugin>
-            <!-- Spring Cloud's new "London tube station not recognized
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
@@ -212,7 +211,6 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
             <plugin>
                 <!-- Sonatype OSS parent pom breaks intermodule dependencies otherwise -->
                 <artifactId>maven-enforcer-plugin</artifactId>
